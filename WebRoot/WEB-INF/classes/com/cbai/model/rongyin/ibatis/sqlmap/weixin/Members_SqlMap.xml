@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="api_members" > 
+
+  <typeAlias type="com.cbai.model.rongyin.ibatis.entity.Members" alias="Members"/>
+  
+  <insert id="insert" parameterClass="Members" >
+    insert into members (memid, memnum, openid, phone, nickname, realname, idnum, logpwd, paypwd,
+      usrcustid, usrcustname, headimgurl, email, state, incode, invitecount, dadmemid, cfrom,
+      lpwderrorcount, ppwderrorcount, ifloanman, iffreeze,address, urgentman, locktime, regtime, authtime)
+    values (#memid:INTEGER#, #memnum:VARCHAR#, #openid:VARCHAR#, #phone:VARCHAR#,
+      #nickname:VARCHAR#, #realname:VARCHAR#, #idnum:VARCHAR#, #logpwd:VARCHAR#, #paypwd:VARCHAR#,
+      #usrcustid:VARCHAR#, #usrcustname:VARCHAR#, #headimgurl:VARCHAR#, #email:VARCHAR#,
+      #state:VARCHAR#, #incode:VARCHAR#, #invitecount:INTEGER#, #dadmemid:VARCHAR#, #cfrom:VARCHAR#,
+      #lpwderrorcount:INTEGER#, #ppwderrorcount:INTEGER#, #ifloanman:VARCHAR#,#iffreeze:VARCHAR#, #address:VARCHAR#,
+      #urgentman:VARCHAR#, #locktime:TIMESTAMP#, #regtime:TIMESTAMP#, #authtime:TIMESTAMP#)
+  </insert> 
+  
+  <select id="getAll" resultClass="Members" parameterClass="java.util.Map"> 
+    select * from members
+    <dynamic prepend="where" >
+      <isNotEmpty prepend="and" property="memnum" >
+        memnum = #memnum#
+      </isNotEmpty>
+      <isNotEmpty prepend="and" property="usrcustid" >
+        usrcustid = #usrcustid#
+      </isNotEmpty>
+      <isNotEmpty prepend="and" property="iffreeze" >
+        iffreeze = #iffreeze#
+      </isNotEmpty> 
+      <isNotEmpty prepend="and" property="ifloanman" >
+        ifloanman = #ifloanman#
+      </isNotEmpty>    
+      <isNotEmpty prepend="and" property="realname" >
+        realname like CONCAT('%',#realname#,'%')
+      </isNotEmpty>  
+      <isNotEmpty prepend="and" property="state" >
+        state = #state#
+      </isNotEmpty>  
+      <isNotEmpty prepend="and" property="phone" >
+        phone like CONCAT('%',#phone#,'%')
+      </isNotEmpty> 
+    </dynamic>
+    order by regtime desc
+  </select>
+  
+  <update id="update" parameterClass="Members" >
+    update members
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="memnum" >
+        memnum = #memnum:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="openid" >
+        openid = #openid:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="phone" >
+        phone = #phone:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="nickname" >
+        nickname = #nickname:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="realname" >
+        realname = #realname:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="idnum" >
+        idnum = #idnum:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="logpwd" >
+        logpwd = #logpwd:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="paypwd" >
+        paypwd = #paypwd:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="usrcustid" >
+        usrcustid = #usrcustid:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="usrcustname" >
+        usrcustname = #usrcustname:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="headimgurl" >
+        headimgurl = #headimgurl:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="email" >
+        email = #email:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="state" >
+        state = #state:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="incode" >
+        incode = #incode:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="invitecount" >
+        invitecount = #invitecount:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="dadmemid" >
+        dadmemid = #dadmemid:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="cfrom" >
+        cfrom = #cfrom:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="lpwderrorcount" >
+        lpwderrorcount = #lpwderrorcount:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="ppwderrorcount" >
+        ppwderrorcount = #ppwderrorcount:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="ifloanman" >
+        ifloanman = #ifloanman:VARCHAR#
+      </isNotNull>
+       <isNotNull prepend="," property="iffreeze" >
+        iffreeze = #iffreeze:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="address" >
+        address = #address:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="urgentman" >
+        urgentman = #urgentman:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="locktime" >
+        locktime = #locktime:TIMESTAMP#
+      </isNotNull>
+      <isNotNull prepend="," property="regtime" >
+        regtime = #regtime:TIMESTAMP#
+      </isNotNull>
+      <isNotNull prepend="," property="authtime" >
+        authtime = #authtime:TIMESTAMP#
+      </isNotNull>
+    </dynamic>
+    where memid = #memid:INTEGER#
+  </update>
+</sqlMap>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="per_login" >
+
+  <typeAlias type="com.cbai.model.common.permission.vo.PerUserVO" alias="PerUserVO"/>
+ 
+  
+  <select id="adminLogin" resultClass="PerUserVO" parameterClass="java.util.Map">
+    select u.userid,u.phone,u.realname,u.state,u.lastlogin
+    from per_users as u
+    where u.phone = #phone# and password = #password#
+  </select> 
+  
+ 
+  <update id="upLastlogin"  parameterClass="java.util.Map">
+    update per_users set lastlogin = #lastlogin:TIMESTAMP# where userid=#userid:INTEGER#
+  </update>
+  
+  
+  <select id="phoneIsExist" resultClass="java.lang.String" >
+     select accid from per_users where phone = #phone#
+  </select>
+   
+  
+</sqlMap>

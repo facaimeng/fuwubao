@@ -1,0 +1,153 @@
+@charset "utf-8";
+/* CSS Document */
+* { margin: 0; padding: 0; }
+body{width:100%; height:100%;color: #666;margin: 0; padding: 0; font-family:"微软雅黑"; font-size:12px;}
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, textarea, p, blockquote, th, td, button{padding:0; margin:0;}
+fieldset, img{border:0;}
+input, label, select, option, textarea, button, fieldset, legend{vertical-align:middle;}
+table{border-collapse:collapse; border-spacing:0;}
+ul, li{list-style: none;}
+h1, h2, h3, h4, h5, h6{font-size:100%; font-weight:normal;}
+img{vertical-align:top; border:0;}
+html,body { font:12px/1.8 'Microsoft YaHei',Tahoma,Verdana,'Simsun'; color:#000; background:#fff; -webkit-text-size-adjust:none;}
+input.text {border-bottom: #eee 1px solid;border-left: #999 1px solid; padding-bottom: 1px; line-height: 27px;padding-left: 3px;width: 220px; padding-right: 3px;background: #fff; height: 25px; color: #000;vertical-align: middle; BORDER-top: #999 1px solid; border-right: #eee 1px solid; padding-top: 1px}
+input.submit {padding-bottom: 0px; line-height: 22px; padding-left: 25px; padding-right: 25px; height: 30px; padding-top: 0px}
+select{color: #333}
+
+
+
+.left{float:left;}
+.right{float:right;}
+.clear{clear:both;}
+.white{color:#fff;}
+.black{color:#666;}
+a{color:#666;text-decoration:none;}
+a:hover{text-decoration:none;}
+.main{width:1000px; margin:0 auto;}
+
+/* 共用 */
+.footer {
+	padding:0px 0px;
+	font-size:12px;
+	overflow:hidden;
+	text-align:center;
+	color:#777;
+}
+.footer b{
+	font-weight:normal;
+	color:#777;
+}
+.footer a {
+	color:#1c57c4;
+	text-decoration:none;
+}
+
+/*----------------------------------------------登录*/
+#login {
+	margin:0px;
+	padding:140px 0px 0px;
+	color:#333;
+}
+.login-lang {
+	}.login-min {
+	width:600px;
+	margin:0px auto 0px;
+	padding:20px 0px;
+}
+.login-left {
+	float:left;
+	margin-top:40px;
+	text-align:center;
+	width:270px;
+	border-right:1px solid #ccc;
+}
+.login-left p {
+	text-align:center;
+	margin-top:10px;
+	padding-left:5px;
+}
+.login-left a.img {
+	}.login-right {
+	float:left;
+	width:305px;
+	padding-left:10px;
+	border-left:1px solid #fff;
+}
+.login-right div i{
+	font-style:normal;
+	padding-left:38px;
+}
+.login-title {
+	font-size:16px;
+	padding-left:85px;
+	height:35px;
+	line-height:35px;
+	margin-bottom:8px;
+	overflow:hidden;
+}
+.login-right input.text {
+	height:20px;
+	line-height:20px;
+	width:150px;
+	margin:0px;
+}
+.login-right p {
+	margin:10px 0px;
+}
+.login-right form label {
+	float:left;
+	width:76px;
+	text-align:right;
+	font-size:13px;
+	padding-right:10px;
+	font-weight:bold;
+}
+.login-submit {
+	padding-left:86px;
+}
+.login-code img {
+	width:60px;
+	height:25px;
+}
+.login-submit {
+	padding-top:5px;
+}
+.login-submit input {
+	margin-right:10px;
+	border:1px solid #71a9c5;
+	cursor:pointer;
+	padding:5px 12px;
+	background:#b5dfe9;
+	border-top:0;
+	border-left:0;
+	color:#333;
+	padding:5px 4px 3px 5px\9;
+	*padding:5px 4px 3px 4px;
+}
+.login-submit a {
+	margin-right:8px;
+}
+.login-zhao {
+	text-align:right;
+	padding-right:15px;
+}
+.login-zhao a {
+	color:#1c57c4;
+	text-decoration:underline;
+	margin:0px 20px;
+}
+.login-zhao a:hover {
+	color:#1c57c4;
+	text-decoration:underline;
+}
+
+.Basic_dvi_red{ padding-right:17px; height:37px; border-radius:3px; border:1px solid #f6b9b9; background:#ffe4e4; font-size:14px; color:#b94a48; line-height:37px; text-align:center; position:absolute; top:20%; z-index:9999;left:50%; margin-left:-60px;}
+.Basic_dvi_red strong{ display:block; display:inline-block; width:17px; height:17px; background:url(/resources/images/sys/shoujiok2.png) no-repeat; float:left!important; margin-top:10px; margin-left:5px; margin-right:2px;}
+.Basic_dvi_red p{ float:left!important; margin:auto;  margin-left:9px;}
+
+.Basic_dvi_green{ padding-right:17px; height:37px; border-radius:3px; border:1px solid #bfd3af; background:#def1d7; font-size:14px; color:#468847; line-height:37px; text-align:center; position:absolute; top:30%; z-index:9999; left:50%; margin-left:-60px;}
+.Basic_dvi_green strong{ display:block; display:inline-block; width:17px; height:17px; background:url(/resources/images/sys/shoujiok.png) no-repeat; float:left!important; margin-top:10px; margin-left:5px; margin-right:2px;}
+.Basic_dvi_green p{ float:left!important;margin:auto;margin-left:9px;}
+
+.left_indx{ background:none !important;}
+.left_indx a span{background:url(/resources/images/sys/li_in.png) left -7px no-repeat !important; font-weight:bold;}

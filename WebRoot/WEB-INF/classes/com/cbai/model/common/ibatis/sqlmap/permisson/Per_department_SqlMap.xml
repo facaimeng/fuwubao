@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="per_department" >
+  
+  <typeAlias type="com.cbai.model.common.ibatis.entity.PerDepartment" alias="PerDepartment"/>
+  
+  <insert id="insert" parameterClass="PerDepartment" >
+    insert into per_department (pdid, name,state,memo)
+    values (#pdid:INTEGER#, #name:VARCHAR#,#state:VARCHAR#,#memo:VARCHAR#)
+  </insert>
+ 
+  <select id="getAll" resultClass="PerDepartment" parameterClass="java.util.Map" > 
+    select * from per_department
+    <dynamic prepend="where" >
+      <isNotEmpty prepend="," property="name" >
+        name like CONTXT('%',#name#,'%')
+      </isNotEmpty>   
+    </dynamic>
+    order by pdid desc
+  </select>
+  
+  <select id="getOne" resultClass="PerDepartment"  >
+    select * from per_department where pdid=#pdid:INTEGER#
+  </select>
+  
+  <select id="getByState" resultClass="PerDepartment" parameterClass="java.lang.String" >
+    select * from per_department where state=#state#  order by pdid desc
+  </select>
+
+  
+  <update id="update" parameterClass="PerDepartment" >
+    update per_department
+    <dynamic prepend="set" >
+      <isNotEmpty prepend="," property="name" >
+        name = #name:VARCHAR#
+      </isNotEmpty> 
+      <isNotEmpty prepend="," property="state" >
+        state = #state:VARCHAR#
+      </isNotEmpty>
+      <isNotEmpty prepend="," property="memo" >
+        memo = #memo:VARCHAR#
+      </isNotEmpty> 
+    </dynamic>
+    where pdid = #pdid:INTEGER#
+  </update>
+ 
+  
+</sqlMap>

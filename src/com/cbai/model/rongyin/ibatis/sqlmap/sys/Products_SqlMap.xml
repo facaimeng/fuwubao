@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="products" >
+
+  <typeAlias type="com.cbai.model.rongyin.ibatis.entity.Products" alias="Products"/>
+  
+  <typeAlias type="com.cbai.model.rongyin.sys.products.vo.ProductSearchVO" alias="ProductSearchVO"/>
+   
+  <insert id="insert" parameterClass="Products" >
+    insert into products (prid, prtid,title, pname, startbidmoney, maxbidmoney, bidperiod, holdperiod,
+      minreturnrate, maxreturnrate, returnrate, buystart, buyend, stockmoney, sales, exitday,
+      outexitday, outexitrate, memo, sindex, state, iftop, viewcount, addtime)
+    values (#prid:INTEGER#, #prtid:INTEGER#, #title:VARCHAR#, #pname:VARCHAR#, #startbidmoney:BIGINT#,
+      #maxbidmoney:BIGINT#, #bidperiod:INTEGER#, #holdperiod:INTEGER#, #minreturnrate:VARCHAR#,
+      #maxreturnrate:VARCHAR#, #returnrate:VARCHAR#, #buystart:TIMESTAMP#, #buyend:TIMESTAMP#,
+      #stockmoney:INTEGER#, #sales:INTEGER#, #exitday:INTEGER#, #outexitday:INTEGER#,
+      #outexitrate:VARCHAR#, #memo:VARCHAR#, #sindex:INTEGER#, #state:VARCHAR#, #iftop:VARCHAR#,
+      #viewcount:INTEGER#, #addtime:TIMESTAMP#)
+  </insert>
+  
+  <select id="getCount" resultClass="java.lang.Integer" > 
+   	select count(*) from products where prtid=#prtid#
+  </select>
+  
+  <select id="getOne" resultClass="Products" > 
+    select p.*,prt.name as prtname from products as p join product_type as prt 
+    on p.prtid=prt.prtid
+    where p.prid=#prid# 
+  </select>
+  
+  <select id="getAll" resultClass="Products"  parameterClass="ProductSearchVO"> 
+    select p.*,prt.name as prtname from products as p join product_type as prt
+    on p.prtid=prt.prtid
+    <dynamic prepend="where" > 
+       <isNotEmpty prepend="and" property="pname" >
+        p.pname like CONCAT('%',#pname#,'%')
+      </isNotEmpty> 
+      <isNotEmpty prepend="and" property="bidperiod" >
+        p.bidperiod = #bidperiod#
+      </isNotEmpty>    
+      <isNotEmpty prepend="and" property="state" >
+        p.state = #state#
+      </isNotEmpty>    
+      <isNotEmpty prepend="and" property="prtid" >
+        p.prtid = #prtid#
+        order by p.sindex desc
+      </isNotEmpty>   
+    </dynamic> 
+    <dynamic > 
+     <isEmpty property="prtid">
+      	order by prt.sindex desc,p.sindex desc
+      </isEmpty>
+    </dynamic>
+  </select>
+  
+  <update id="update" parameterClass="Products" >
+    update products
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="prtid" >
+        prtid = #prtid:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="title" >
+        title = #title:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="pname" >
+        pname = #pname:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="startbidmoney" >
+        startbidmoney = #startbidmoney:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="maxbidmoney" >
+        maxbidmoney = #maxbidmoney:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="bidperiod" >
+        bidperiod = #bidperiod:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="holdperiod" >
+        holdperiod = #holdperiod:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="minreturnrate" >
+        minreturnrate = #minreturnrate:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="maxreturnrate" >
+        maxreturnrate = #maxreturnrate:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="returnrate" >
+        returnrate = #returnrate:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="buystart" >
+        buystart = #buystart:TIMESTAMP#
+      </isNotNull>
+      <isNotNull prepend="," property="buyend" >
+        buyend = #buyend:TIMESTAMP#
+      </isNotNull>
+      <isNotNull prepend="," property="stockmoney" >
+        stockmoney = #stockmoney:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="sales" >
+        sales = #sales:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="exitday" >
+        exitday = #exitday:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="outexitday" >
+        outexitday = #outexitday:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="outexitrate" >
+        outexitrate = #outexitrate:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="memo" >
+        memo = #memo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="sindex" >
+        sindex = #sindex:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="state" >
+        state = #state:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="iftop" >
+        iftop = #iftop:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="viewcount" >
+        viewcount = #viewcount:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="addtime" >
+        addtime = #addtime:TIMESTAMP#
+      </isNotNull>
+    </dynamic>
+    where prid = #prid:INTEGER#
+  </update>
+</sqlMap>

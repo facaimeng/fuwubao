@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="per_account" >
+
+  <typeAlias type="com.cbai.model.common.ibatis.entity.PerAccount" alias="PerAccount"/>
+
+  <insert id="insert" parameterClass="PerAccount" >
+    insert into per_account (accid, userid,utype, phone, email, loginname, password, state, memo, lastlogin, addtime)
+    values (#accid:INTEGER#,#userid:INTEGER#,#utype:INTEGER#,#phone:VARCHAR#,#email:VARCHAR#,#loginname:VARCHAR#, #password:VARCHAR#, #state:VARCHAR#,
+      #memo:VARCHAR#, #lastlogin:TIMESTAMP#, #addtime:TIMESTAMP#)
+    <selectKey resultClass="int" type="post" keyProperty="accid" >  
+       select @@IDENTITY as value  
+    </selectKey>
+  </insert>
+  
+  <update id="update" parameterClass="PerAccount">
+      update per_account 
+      <dynamic prepend="set">
+          <isNotNull property="loginname" prepend=",">
+              loginname = #loginname:VARCHAR#
+          </isNotNull> 
+          <isNotNull property="email" prepend=",">
+              email = #email:VARCHAR#
+          </isNotNull> 
+          <isNotNull property="memo" prepend=",">
+              memo = #memo:VARCHAR#
+          </isNotNull>
+          <isNotNull property="password" prepend=",">
+              password = #password:VARCHAR#
+          </isNotNull>
+          
+          <isNotNull property="lastlogin" prepend=",">
+              lastlogin = #lastlogin:TIMESTAMP#
+          </isNotNull>
+      </dynamic>
+      where accid = #accid:INTEGER#
+  </update>
+  
+  <update id="lockop" parameterClass="java.util.Map">
+  	  update per_account set state=#state:VARCHAR# where accid = #accid:INTEGER#
+  </update>
+  <!-- 
+  <select id="adminLogin" resultClass="com.cbai.model.common.permission.vo.AdminAccount" parameterClass="java.util.Map">
+    select a.accid,a.loginname,a.state,a.lastlogin,u.uname,u.userid
+    from per_account as a,per_users as u
+    where a.userid=u.userid and a.loginname = #loginname# or a.phone = #loginname# and password = #password#
+  </select> 
+   -->
+ 
+  <update id="upLastlogin"  parameterClass="java.util.Map">
+    update per_account set lastlogin = #lastlogin:TIMESTAMP# where accid=#accid:INTEGER#
+  </update>
+ 
+  
+  
+  <select id="getAccByphone" resultClass="PerAccount" parameterClass="java.lang.String">
+     select * from per_account where phone = #phone#
+  </select>
+  
+  <select id="phoneIsExist" resultClass="java.lang.String" >
+     select accid from per_account where phone = #phone#
+  </select>
+  
+  <select id="isOpenBibi" resultClass="java.lang.String">
+     select state from per_account where userid = #userid#
+  </select>
+  
+</sqlMap>

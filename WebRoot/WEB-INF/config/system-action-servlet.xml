@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd"
+	default-lazy-init="true">
+	
+	<!--开启注解-->
+	<context:annotation-config/> 
+	
+	<bean id="perMenuAction" class="com.cbai.model.common.permission.action.PerMenuAction" autowire="byName" />
+	
+	<bean id="perRoleAction" class="com.cbai.model.common.permission.action.PerRoleAction" autowire="byName" />
+	
+	<bean id="perDepMgAction" class="com.cbai.model.common.permission.action.PerDepMgAction" autowire="byName" />
+	
+	<bean id="perUsersMgAction" class="com.cbai.model.common.permission.action.PerUsersMgAction" autowire="byName" />
+	
+	<bean id="perCommonAction" class="com.cbai.model.common.permission.action.PerCommonAction" autowire="byName" />
+	
+	<bean id="adminupAction" class="com.cbai.model.rongyin.sys.common.action.AdminupAction" autowire="byName" />
+	
+	<bean id="adminDownAction" class="com.cbai.model.rongyin.sys.common.action.AdminDownAction" autowire="byName" />
+	
+	<bean id="bankinfoMg" class="com.cbai.model.rongyin.sys.sysset.action.BankinfoMgAction" autowire="byName" /> 
+	
+	<bean id="advertiseAction" class="com.cbai.model.rongyin.sys.content.action.AdvertiseAction" autowire="byName" />
+	
+	<bean id="newsAction" class="com.cbai.model.rongyin.sys.content.action.NewsAction" autowire="byName" /> 
+	
+	<bean id="articleptypeAction" class="com.cbai.model.rongyin.sys.content.action.ArticleptypeAction" autowire="byName" /> 
+	
+	<bean id="articletypeAction" class="com.cbai.model.rongyin.sys.content.action.ArticletypeAction" autowire="byName" /> 
+	
+	<bean id="articleAction" class="com.cbai.model.rongyin.sys.content.action.ArticleAction" autowire="byName" /> 
+     
+    <bean id="loanMgAction" class="com.cbai.model.rongyin.sys.loan.action.LoanMgAction" autowire="byName" />
+     
+    <bean id="loanTenderAction" class="com.cbai.model.rongyin.sys.loan.action.LoanTenderAction" autowire="byName" />
+    
+    <bean id="memBidLogMgAction" class="com.cbai.model.rongyin.sys.loan.action.MemBidLogMgAction" autowire="byName" />
+ 
+    <bean id="myProjectMgAction" class="com.cbai.model.rongyin.sys.projects.action.MyProjectMgAction" autowire="byName" />
+    
+    <bean id="projectMgAction" class="com.cbai.model.rongyin.sys.projects.action.ProjectMgAction" autowire="byName" />
+ 
+    <bean id="projectAttachMgAction" class="com.cbai.model.rongyin.sys.projects.action.ProjectAttachMgAction" autowire="byName" />
+    
+    <bean id="projectImgsMgAction" class="com.cbai.model.rongyin.sys.projects.action.ProjectImgsMgAction" autowire="byName" />
+
+    <bean id="companyMgAction" class="com.cbai.model.rongyin.sys.users.action.CompanyMgAction" autowire="byName" />
+    
+    <bean id="companyAttach" class="com.cbai.model.rongyin.sys.users.action.CompanyAttachAction" autowire="byName" />
+    
+    <bean id="memberMgAction" class="com.cbai.model.rongyin.sys.users.action.MemberMgAction" autowire="byName" />
+    
+    <bean id="loanManMgAction" class="com.cbai.model.rongyin.sys.users.action.LoanManMgAction" autowire="byName" />
+    
+    <bean id="usersStatAction" class="com.cbai.model.rongyin.sys.stat.action.UsersStatAction" autowire="byName" />
+    
+    <bean id="exportMemberAction" class="com.cbai.model.rongyin.sys.report.action.ExportMemberAction" autowire="byName" />
+ 
+</beans>

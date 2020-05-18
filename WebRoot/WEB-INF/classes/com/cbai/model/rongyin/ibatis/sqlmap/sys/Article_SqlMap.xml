@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="article" >
+
+ <typeAlias type="com.cbai.model.rongyin.ibatis.entity.Article" alias="Article"/>
+  
+  <insert id="insert" parameterClass="Article" >
+    insert into article (aid, atid,  title, ifindex,viewcount, sindex, pubtime, content,ptitle,pdescription,pkeywords)
+    values (#aid:INTEGER#, #atid:INTEGER#, #title:VARCHAR#, #ifindex:VARCHAR#,#viewcount:INTEGER#, #sindex:INTEGER#,
+      #pubtime:TIMESTAMP#, #content:LONGVARCHAR#,#ptitle:VARCHAR#,#pdescription:VARCHAR#,#pkeywords:VARCHAR#)
+  </insert>
+  
+  <select id="getAll" resultClass="Article" parameterClass="java.util.Map" >
+		select *
+		from article
+		where atid=#atid#
+		<dynamic > 
+			<isNotEmpty prepend="and" property="title">
+				title like CONCAT('%', #title#, '%')
+			</isNotEmpty>
+		</dynamic>
+		order by sindex DESC,pubtime desc
+   </select>
+   
+   <select id="getPre" resultClass="Article" parameterClass="java.util.Map" >
+		select aid,title from article where sindex <![CDATA[ > ]]>  #sindex# and atid=#atid# order by sindex asc limit 0,1
+	</select>
+	
+ 	<select id="getNext" resultClass="Article" parameterClass="java.util.Map" >
+		select aid,title from article where sindex <![CDATA[ < ]]>  #sindex# and atid=#atid# order by sindex desc limit 0,1
+	</select>
+	
+   <select id="getIndex" resultClass="Article" parameterClass="java.util.Map" >
+		select a.aid,a.title,a.atid
+		from article as a,articletype as at
+		where a.ifindex='Y' and a.atid=at.atid and at.atype=#atype# order by a.sindex DESC,a.pubtime desc
+   </select>
+   
+   <select id="getOne" resultClass="Article" parameterClass="java.lang.Integer" >
+		select * from article where aid =  #aid#
+	</select>
+	
+	<update id="updateOne" parameterClass="Article" >
+		update article
+		<dynamic prepend="set" > 
+			<isNotNull prepend="," property="title" >
+			  title = #title:VARCHAR#
+			</isNotNull>
+			 <isNotNull prepend="," property="viewcount" >
+			  viewcount = #viewcount:INTEGER#
+			</isNotNull>
+			<isNotNull prepend="," property="sindex" >
+			  sindex = #sindex:INTEGER#
+			</isNotNull> 
+			
+		    <isNotNull prepend="," property="ifindex" >
+			  ifindex = #ifindex:VARCHAR#
+			</isNotNull>
+ 
+			<isNotNull prepend="," property="content" >
+			  content = #content:LONGVARCHAR#
+			</isNotNull>
+			
+			<isNotNull prepend="," property="ptitle" >
+			  ptitle = #ptitle:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="pdescription" >
+			  pdescription = #pdescription:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="pkeywords" >
+			  pkeywords = #pkeywords:VARCHAR#
+			</isNotNull>
+			
+			<isNotNull prepend="," property="pubtime" >
+			  pubtime = #pubtime:TIMESTAMP#
+			</isNotNull>
+		</dynamic>
+		where aid = #aid:INTEGER#
+	</update>
+	
+	<update id="updateViewCount" parameterClass="java.lang.Integer" >
+		update article as a
+		set a.viewcount = a.viewcount+1
+		where a.aid = #aid#
+    </update>
+    
+	 <delete id="delete" >
+      delete      
+      from article
+      where aid = #aid:INTEGER#
+     </delete>
+     
+     <select id="delSearch" resultClass="java.util.HashMap" parameterClass="java.util.Map" >
+		select aid,sindex
+		from article where atid=#atid#
+		order by sindex DESC
+     </select>
+     
+     <update id="delUpdate" parameterClass="java.util.Map" >
+		update article
+		set sindex = #sindex#
+		where aid = #aid#
+     </update>
+   
+</sqlMap>

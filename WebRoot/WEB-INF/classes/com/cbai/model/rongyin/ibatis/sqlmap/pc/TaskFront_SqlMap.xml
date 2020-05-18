@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="task_front" >
+
+    <typeAlias type="com.cbai.model.rongyin.ibatis.entity.Task" alias="Task"/>
+   
+    <resultMap id="taskMap" class="Task">
+        <result property="taskId" column="task_id"/>
+        <result property="taskCode" column="task_code"/>
+        <result property="taskType" column="task_type"/>
+        <result property="taskName" column="task_name"/>
+        <result property="jobClass" column="job_class"/>
+        <result property="execycle" column="execycle"/>
+        <result property="dayOfMonth" column="day_of_month"/>
+        <result property="dayOfWeek" column="day_of_week"/>
+        <result property="hour" column="hour"/>
+        <result property="minute" column="minute"/>
+        <result property="intervalHour" column="interval_hour"/>
+        <result property="intervalMinute" column="interval_minute"/>
+        <result property="taskIntervalUnit" column="task_interval_unit"/>
+        <result property="cronExpression" column="cron_expression"/>
+        <result property="isEnable" column="is_enable"/>
+        <result property="taskRemark" column="task_remark"/>
+        <result property="userId" column="user_id"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+    
+    
+    <select id="allTasks" resultMap="taskMap" parameterClass="java.util.Map" >
+		select * from task where is_enable='1' order by create_time desc 
+	</select>
+	
+	
+    <select id="cronExpression" resultClass="java.lang.String" parameterClass="java.lang.Integer" >
+		select cron_expression from task where task_id=#taskId#
+	</select>
+	
+</sqlMap>

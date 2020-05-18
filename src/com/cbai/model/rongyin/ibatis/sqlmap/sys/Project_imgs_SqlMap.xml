@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="project_imgs" >
+
+  <typeAlias type="com.cbai.model.rongyin.ibatis.entity.ProjectImgs" alias="ProjectImgs"/>
+  
+  <insert id="insert" parameterClass="ProjectImgs" >
+    insert into project_imgs (primgid, proid, name, fsize, sindex, ext, furl,memo, uptime)
+    values (#primgid:INTEGER#, #proid:INTEGER#, #name:VARCHAR#, #fsize:VARCHAR#, #sindex:INTEGER#,
+      #ext:VARCHAR#, #furl:VARCHAR#,#memo:VARCHAR#, #uptime:TIMESTAMP#)
+  </insert> 
+  
+  <select id="getAll" resultClass="ProjectImgs" parameterClass="java.lang.Integer" >
+		select *
+		from project_imgs where proid = #proid#
+		order by uptime desc
+  </select>
+  
+  
+  
+  <select id="getOne" resultClass="ProjectImgs" parameterClass="java.lang.Integer" >
+		select * from project_imgs where primgid =  #primgid#
+  </select>
+  
+  <update id="update" parameterClass="ProjectImgs" >
+    update project_imgs
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="proid" >
+        proid = #proid:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="name" >
+        name = #name:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="fsize" >
+        fsize = #fsize:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="sindex" >
+        sindex = #sindex:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="ext" >
+        ext = #ext:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="furl" >
+        furl = #furl:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="memo" >
+        memo = #memo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="uptime" >
+        uptime = #uptime:TIMESTAMP#
+      </isNotNull>
+    </dynamic>
+    where primgid = #primgid:INTEGER#
+  </update>
+  
+  <delete id="delete" parameterClass="java.lang.Integer" >
+    delete from project_imgs
+    where primgid = #primgid:INTEGER#
+  </delete>
+</sqlMap>

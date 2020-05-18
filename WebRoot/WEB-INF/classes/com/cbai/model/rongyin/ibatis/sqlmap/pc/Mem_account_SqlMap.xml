@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="pc_mem_account" >
+  
+  <typeAlias type="com.cbai.model.rongyin.ibatis.entity.MemAccount" alias="MemAccount"/>
+  
+  <typeAlias type="com.cbai.model.rongyin.pc.member.vo.MemberVO" alias="MemberVO"/>
+  
+  <typeAlias type="com.cbai.model.rongyin.ibatis.entity.MemCards" alias="MemCards"/>
+  
+  
+   <insert id="insert" parameterClass="MemAccount" >
+    insert into mem_account (maccid, memid, allassets, ydayrepay, allrepay, avlmoney, avlprofit,
+      allinmoney, alloutmoney, lastcaltime)
+    values (#maccid:INTEGER#, #memid:INTEGER#, #allassets:BIGINT#, #ydayrepay:BIGINT#,
+      #allrepay:BIGINT#, #avlmoney:BIGINT#, #avlprofit:BIGINT#, #allinmoney:BIGINT#,
+      #alloutmoney:BIGINT#, #lastcaltime:TIMESTAMP#)
+  </insert> 
+  
+  <insert id="insert-card" parameterClass="MemCards" >
+    insert into mem_cards (memid, bkcode, cardnum, addtime)
+    values (#memid:INTEGER#,#bkcode:VARCHAR#,#cardnum:VARCHAR#, #addtime:TIMESTAMP#)
+  </insert> 
+  
+  <select id="getCards" resultClass="MemCards" > 
+  	   select mc.*,bk.name as bkname,bk.bklogourl
+       from mem_cards as mc left join bank_info as bk on mc.bkcode=bk.bkcode
+  	   where mc.memid=#memid# order by mc.addtime desc
+  </select> 
+  
+  <select id="select" resultClass="MemAccount" parameterClass="java.util.Map">
+     select * from mem_account
+     <dynamic prepend="where">
+          <isNotEmpty prepend="and" property="memid" >
+	          memid = #memid:INTEGER#
+	      </isNotEmpty>
+     </dynamic>
+     order by lastcaltime desc
+  </select> 
+   
+  <select id="getAvlmoney" resultClass="java.lang.Long" parameterClass="java.lang.Integer">
+     select avlmoney from mem_account where memid = #memid:INTEGER#
+  </select>
+  
+  <select id="getCapital" resultClass="java.lang.Long" parameterClass="java.util.Map"> 
+  	   select sum(bidmoney) from mem_bid_logs where memid=#memid#
+  	   <dynamic >
+  	   		 <isNotEmpty prepend="and" property="st" >
+	         		<isEqual property="st" compareValue="1"> 
+						 repaymoney = 0
+					</isEqual>
+					<isEqual property="st" compareValue="2"> 
+						 paytime is null
+					</isEqual>
+	      	 </isNotEmpty>
+  	   </dynamic> 
+  </select>
+  
+  <select id="getWaitProfit" resultClass="java.lang.Long" parameterClass="java.util.Map"> 
+  	   select sum(profit) from mem_bid_logs where memid=#memid# and repaymoney = 0 
+  </select>
+  
+  <select id="getAllProfit" resultClass="java.lang.Long" parameterClass="java.util.Map"> 
+  	   select sum(repaymoney-bidmoney) from mem_bid_logs where memid=#memid# and repaymoney >= bidmoney 
+  </select>
+  
+  <update id="upByMemid" parameterClass="java.util.Map" >
+  	update mem_account 
+  	<dynamic prepend="set" > 
+      <isNotNull prepend="," property="avlmoney" >
+        avlmoney = #avlmoney:BIGINT#
+      </isNotNull> 
+    </dynamic>
+    where memid = #memid:INTEGER#
+  </update>
+   
+  <update id="update" parameterClass="MemAccount" >
+    update mem_account
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="allassets" >
+        allassets = #allassets:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="ydayrepay" >
+        ydayrepay = #ydayrepay:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="allrepay" >
+        allrepay = #allrepay:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="avlmoney" >
+        avlmoney = #avlmoney:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="avlprofit" >
+        avlprofit = #avlprofit:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="allinmoney" >
+        allinmoney = #allinmoney:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="alloutmoney" >
+        alloutmoney = #alloutmoney:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="allinprofit" >
+        allinprofit = #allinprofit:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="alloutprofit" >
+        alloutprofit = #alloutprofit:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="lastcaltime" >
+        lastcaltime = #lastcaltime:TIMESTAMP#
+      </isNotNull>
+    </dynamic>
+    where maccid = #maccid:INTEGER#
+  </update>
+  
+</sqlMap>

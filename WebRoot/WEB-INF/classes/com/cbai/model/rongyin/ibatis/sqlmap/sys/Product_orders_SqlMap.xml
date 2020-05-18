@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="product_orders" >
+
+  <typeAlias type="com.cbai.model.rongyin.ibatis.entity.ProductOrders" alias="ProductOrders"/>
+  
+  <insert id="insert" parameterClass="ProductOrders" >
+    insert into product_orders (poid, pordernum, proid, bidperiod, holdperiod, minreturnrate,
+      maxreturnrate, returnrate, memid, payment, avlmoney, state, outprofit, calcprofitdate,
+      lastprofitdate, addtime)
+    values (#poid:INTEGER#, #pordernum:VARCHAR#, #proid:INTEGER#, #bidperiod:INTEGER#,
+      #holdperiod:INTEGER#, #minreturnrate:VARCHAR#, #maxreturnrate:VARCHAR#, #returnrate:VARCHAR#,
+      #memid:INTEGER#, #payment:BIGINT#, #avlmoney:BIGINT#, #state:VARCHAR#, #outprofit:BIGINT#,
+      #calcprofitdate:DATE#, #lastprofitdate:DATE#, #addtime:TIMESTAMP#)
+  </insert>
+  
+  
+  <update id="updateAvlmoney" parameterClass="java.util.Map" >
+      update product_orders set avlmoney = avlmoney + #transAmt# where poid = #poid:INTEGER#
+  </update>
+  
+  <update id="update" parameterClass="ProductOrders" >
+    update product_orders
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="pordernum" >
+        pordernum = #pordernum:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="proid" >
+        proid = #proid:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="bidperiod" >
+        bidperiod = #bidperiod:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="holdperiod" >
+        holdperiod = #holdperiod:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="minreturnrate" >
+        minreturnrate = #minreturnrate:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="maxreturnrate" >
+        maxreturnrate = #maxreturnrate:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="returnrate" >
+        returnrate = #returnrate:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="memid" >
+        memid = #memid:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="payment" >
+        payment = #payment:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="avlmoney" >
+        avlmoney = #avlmoney:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="state" >
+        state = #state:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="outprofit" >
+        outprofit = #outprofit:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="calcprofitdate" >
+        calcprofitdate = #calcprofitdate:DATE#
+      </isNotNull>
+      <isNotNull prepend="," property="lastprofitdate" >
+        lastprofitdate = #lastprofitdate:DATE#
+      </isNotNull>
+      <isNotNull prepend="," property="addtime" >
+        addtime = #addtime:TIMESTAMP#
+      </isNotNull>
+    </dynamic>
+    where poid = #poid:INTEGER#
+  </update>
+</sqlMap>

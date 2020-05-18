@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="per_menu" >  
+	
+  <typeAlias type="com.cbai.model.common.ibatis.entity.PerMenu" alias="PerMenu"/>
+	
+  <insert id="insert" parameterClass="PerMenu" >
+    insert into per_menu (menuid, fid,icon, name,path,tag, actionurl, state, sindex, memo,isdir, addtime)
+    values (#menuid:INTEGER#, #fid:INTEGER#,#icon:VARCHAR#,#name:VARCHAR#,#path:VARCHAR#,#tag:VARCHAR#,  #actionurl:VARCHAR#, #state:VARCHAR#,
+      #sindex:INTEGER#, #memo:VARCHAR#,#isdir:VARCHAR#, #addtime:TIMESTAMP#)
+  </insert> 
+  
+   <select id="getAll" resultClass="PerMenu" parameterClass="java.util.Map" >
+		select * from per_menu 
+		<dynamic prepend="where"> 
+		    <isNotEmpty property="fid">
+				fid = #fid#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="state">
+				state = #state#
+			</isNotEmpty> 
+		</dynamic>
+		order by sindex DESC,addtime desc
+   </select>
+   
+	<select id="getForRole" resultClass="PerMenu" parameterClass="java.util.Map" >
+		select pm1.menuid,pm1.fid,pm1.name,pm1.isdir
+		from per_menu as pm1
+		where pm1.fid= #fid# and pm1.state =  #state:VARCHAR#
+		order by pm1.sindex DESC,pm1.addtime desc
+	</select> 
+	
+	<select id="getForRole1" resultClass="PerMenu" parameterClass="java.util.Map" >
+		select pm1.menuid,pm1.fid,pm1.name,pm1.isdir,(select count(*) from per_menu as pm2 where pm2.fid=pm1.menuid) childCount
+		from per_menu as pm1
+		where pm1.fid= #fid# and pm1.state =  #state:VARCHAR#
+		order by pm1.sindex DESC,pm1.addtime desc
+	</select> 
+ 
+	
+	<select id="getOne" resultClass="PerMenu" parameterClass="java.lang.Integer" >
+		select * from per_menu where menuid =  #menuid#
+	</select>
+	
+	<select id="getNavOne" resultClass="PerMenu" parameterClass="java.lang.Integer" >
+		select menuid,fid,name from per_menu where menuid =  #menuid#
+	</select>
+ 	
+ 	<update id="updateIsdir"  parameterClass="java.lang.Integer">
+		update per_menu set isdir='Y' where menuid=#menuid:INTEGER#
+	</update>
+	
+	<update id="updateOne" parameterClass="PerMenu" >
+		update per_menu
+		<dynamic prepend="set" >
+			<isNotNull prepend="," property="name" >
+			  name = #name:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="icon" >
+			  icon = #icon:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="actionurl" >
+			  actionurl = #actionurl:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="memo" >
+			  memo = #memo:VARCHAR#
+			</isNotNull>	
+			<isNotNull prepend="," property="state" >
+			  state = #state:VARCHAR#
+			</isNotNull>	 
+			<isNotNull prepend="," property="sindex" >
+			  sindex = #sindex:INTEGER#
+			</isNotNull> 
+		</dynamic>
+		where menuid = #menuid:INTEGER#
+	</update>
+	
+	<update id="updatePath" parameterClass="PerMenu" >
+		update per_menu set path=replace(path,#oldname:VARCHAR#,#name:VARCHAR#)
+	</update>
+  
+</sqlMap>

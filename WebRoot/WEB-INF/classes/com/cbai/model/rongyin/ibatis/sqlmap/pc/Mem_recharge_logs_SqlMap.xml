@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="pc_mem_recharge_logs" >
+  
+   <typeAlias type="com.cbai.model.rongyin.ibatis.entity.MemRechargeDetail" alias="MemRechargeDetail"/>
+
+   <insert id="insert" parameterClass="MemRechargeDetail" >
+    insert into mem_recharge_detail (rdid, recid, feeamt, feecustid, feeaccid, paygate, banknum)
+    values (#rdid:INTEGER#, #recid:INTEGER#, #feeamt:VARCHAR#,
+           #feecustid:VARCHAR#, #feeaccid:VARCHAR#, #paygate:VARCHAR#, #banknum:VARCHAR#)
+   </insert>
+  
+</sqlMap>

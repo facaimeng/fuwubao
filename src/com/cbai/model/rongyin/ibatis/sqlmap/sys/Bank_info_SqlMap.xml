@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="bank_info" > 
+
+  <typeAlias type="com.cbai.model.rongyin.ibatis.entity.BankInfo" alias="BankInfo"/>
+  
+  <insert id="insert" parameterClass="BankInfo" >
+    insert into bank_info (name, bkcode, bklogourl, sindex,state,memo)
+    values (#name:VARCHAR#, #bkcode:VARCHAR#, #bklogourl:VARCHAR#,
+      #sindex:INTEGER#,#state:VARCHAR#,#memo:VARCHAR#)
+  </insert>
+  
+  <select id="getAll" resultClass="BankInfo" >
+		select * from bank_info order by bkid desc
+  </select>
+   
+  <select id="getOne" resultClass="BankInfo" parameterClass="java.lang.Integer" >
+		select * from bank_info where bkid = #bkid#
+  </select>
+  
+  <update id="update" parameterClass="BankInfo" >
+    update bank_info
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="name" >
+        name = #name:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="bkcode" >
+        bkcode = #bkcode:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="bklogourl" >
+        bklogourl = #bklogourl:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="sindex" >
+        sindex = #sindex:INTEGER#
+      </isNotNull> 
+      <isNotNull prepend="," property="state" >
+        state = #state:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="memo" >
+        memo = #memo:VARCHAR#
+      </isNotNull>
+    </dynamic>
+    where bkid = #bkid:BIGINT#
+  </update>
+  
+  <delete id="delete" >
+      delete from bank_info where bkid = #bkid#
+  </delete>
+</sqlMap>

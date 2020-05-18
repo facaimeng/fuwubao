@@ -1,0 +1,731 @@
+﻿/* 投资理念 */
+.fund-idea{
+  padding: 30px 90px 60px 80px;
+}
+.fund-idea .pic{
+  float: left;
+  width: 448px;
+  height: 191px;
+  overflow: hidden;
+}
+.fund-idea .pic img{
+  width: 448px;
+  min-height: 191px;
+}
+.idea-text{
+  margin-left: 470px;
+  margin-top: 6px;
+  text-align: justify;
+}
+.idea-text b,.fund-tactics ul li b{
+  font-size: 16px;
+  color:#f98818;
+  line-height: 30px;
+}
+.idea-text p{
+  margin-top:28px;
+  color: #4d4c4d;
+  line-height: 24px;
+  text-align: justify;
+}
+ .idea-p p{
+     margin-top: -10px;
+ }
+.invest-idea,.invest-tactics{
+  width: 940px;
+  margin: 0 auto;
+  padding-top: 32px;
+}
+.invest-idea div,.invest-tactics div{
+  float: left;
+  width: 100%;
+  margin-bottom: 30px;
+}
+.invest-idea img{
+  float: left;
+}
+.invest-tactics img{
+  float: right;
+}
+.invest-idea p,.invest-tactics p{
+  width:435px ;
+  text-align: left;
+  line-height: 23px;
+}
+.invest-idea p b,.invest-tactics p b{
+  display: block;
+  margin: 3px 0 25px 0;
+  color: #f98818;
+}
+
+/* 投资策略 */
+.fund-tactics{
+  width: 950px;
+  overflow: hidden;
+  margin:0 75px;
+  padding-top: 40px;
+  padding-bottom: 57px;
+}
+.fund-tactics ul{
+  width: 1000px;
+}
+.fund-tactics ul li{
+  float: left;
+  width: 210px;
+  margin-right: 36px;
+  text-align: center;
+}
+.fund-tactics ul li img{
+  width: 170px;
+  height: 170px;
+  margin:0 20px 20px 20px;
+  border-radius: 50%;
+}
+.fund-tactics ul li p{
+  line-height: 23px;
+}
+ 
+.pay-content{
+  width: 100%;
+  padding-top: 20px;
+  text-align: center;
+}
+.pay-content p{
+  width: 630px;
+  margin: 35px auto 0;
+  line-height: 28px;
+}
+
+
+/* 产品与服务总页面 */
+.service-bar{
+  position: relative;
+  width: 916px;
+  height: 47px;
+  margin: 58px auto 0;
+  padding-bottom: 23px;
+  overflow: hidden;
+}
+.service-bar .t-style-3 li{
+ padding:0 11px;
+}
+.service-bar .t-style-3{
+  position: absolute;
+  z-index: 100;
+  margin-left: -3px;
+  width: 1000px;
+}
+.service-bar .t-style-3 li a{
+  position: relative;
+  width: 206px;
+  height: 45px;
+  border-radius:0;
+}
+.about-noah{
+  position: relative;
+  width: 916px;
+  margin: 0 auto;
+  padding-top: 225px;
+  margin-top: -225px;
+}
+.about-noah h3{
+  position: relative;
+  font-size: 36px;
+  font-weight: bold;
+  color: #f98818;
+  text-align: center;
+}
+.about-noah h3 small{
+  display: block;
+  font-size: 18px;
+  font-weight: bold;
+  color: #000;
+}
+.about-noah h3 span{
+  position: absolute;
+  left: 50%;
+  top: 62px;
+  z-index: 1;
+  margin-left: -20px;
+}
+.about-noah ul{
+  text-align: left;
+}
+.about-noah>ul>li{
+  position: relative;
+}
+.noah-first{
+  padding-top: 205px;
+  margin-top: -170px;
+}
+.noah-others{
+  padding-top: 135px;
+  margin-top: -100px;
+}
+.about-noah .cnt{
+  position: absolute;
+  z-index: 1;
+  left: 614px;
+  right: 26px;
+  bottom: 0;
+  line-height: 36px;
+  text-align: justify;
+}
+.noah-first .cnt{
+  top: 220px;
+}
+.noah-others .cnt{
+  top:140px;
+}
+.about-noah .arrow{
+  position: absolute;
+  top: 50%;
+  left: -43px;
+  margin-top: -20px;
+  z-index: 1;
+}
+.about-noah ul span{
+  position: absolute;
+  z-index: 1;
+}
+.about-noah .noah-first span{
+  top: 365px;
+}
+.about-noah .noah-others span{
+  top: 295px;
+}
+.li-right span{
+  right:410px;
+  background-position: -90px -60px;
+}
+.li-left span{
+  left: 410px;
+  background-position: -120px -60px;
+}
+.li-left img{
+  float: right;
+  width: 664px;
+  height: 348px
+}
+.li-right img{
+  width: 664px;
+  height: 348px
+}
+.icon-about-arrow{
+  width: 25px;
+  height: 20px;
+}
+.about-noah ul section{
+  position: absolute;
+  width: 386px;
+  min-height: 185px;
+  padding: 20px 17px;
+  z-index: 2;
+  bottom: 0;
+  background: #fcfcfc;
+}
+.family-wealth{
+  position: absolute;
+  width: 453px;
+  min-height: 200px;
+  padding: 20px 45px 30px;
+  left: 50%;
+  bottom:0;
+  margin-left: -272px;
+  z-index: 2;
+  background: #fcfcfc;
+}
+.family-wealth h3{
+  padding-bottom: 20px;
+  font-size: 30px;
+  color: #000;
+}
+.family-wealth strong{
+  display: block;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 22px;
+  text-align: left;
+}
+.about-noah section span{
+  top:42px;
+}
+.li-right section{
+  right: 0;
+}
+.about-noah h4{
+  font-size: 20px;
+  color: #000;
+  font-weight: bold;
+}
+.about-noah h4 small{
+  margin-left: 10px;
+  font-size: 15px;
+}
+.about-noah section p{
+  margin-top: 12px;
+  font-size: 12px;
+  line-height: 22px;
+  text-align: left;
+  color: #666;
+}
+.about-noah section p span{
+  position: inherit;
+  margin: 0;
+  font-weight: bold;
+  color: #f98818;
+}
+.about-noah section a{
+  margin-top: 12px;
+  float: none;
+}
+.about-noah section .font-14{
+  font-size: 14px;
+  line-height: 24px;
+}
+.about-noah section .text-center{
+  text-align: center;
+}
+.display-block{
+  display: block;
+}
+
+.about-noah-assets{
+  padding:25px 80px 30px 100px;
+}
+.about-noah-assets li{
+  position: relative;
+  z-index: 1;
+  background-color: #fff;
+  margin-top:18px;
+}
+.about-noah-assets .cnt{
+  position: absolute;
+  z-index: 1;
+  left: 614px;
+  right: 26px;
+  top: 15px;
+  bottom: 0;
+  line-height: 36px;
+  text-align: justify;
+}
+.about-noah-assets .arrow{
+  position: absolute;
+  top: 50%;
+  left: -43px;
+  margin-top: -20px;
+  z-index: 1;
+}
+
+.t-product{
+  height: auto;
+}
+.t-product h3{
+  margin-right: 40px;
+  font-size: 48px;
+  color: #f98818;
+  font-style: italic;
+}
+.t-product.text-right h3{
+  margin-left: 20px;
+  margin-right: 0;
+}
+.t-product h4{
+  padding-top: 6px;
+  font-size: 24px;
+}
+.t-product .icon-horizontal-1{
+  margin-top: 8px;
+}
+.t-product-1{
+  margin-top: -160px;
+}
+/* 新增 */
+.about-content{
+  position: relative;
+  width: 1400px;
+  background:#fcfcfc;
+}
+.about-menu{
+  width: 133px;
+  position: absolute;
+  top: 200px;
+  right:0px;
+  z-index: 10;
+}
+.about-menu.affix{
+  position: fixed;
+  top: 100px;
+}
+.about-menu li{
+  display: block;
+  height: 22px;
+  text-indent: 20px;
+}
+.about-menu li a{
+  font-size: 14px;
+  color: #dfcfad;
+}
+.about-menu li a i{
+  float: left;
+  margin-top: -3px;
+  margin-left: 10px;
+  font-style: normal;
+  display: none;
+  text-indent: 0;
+}
+.about-menu li a:hover{
+  color: #f98818;
+}
+.about-menu li a:hover i{
+  display: block;
+  color: #dfcfad;
+}
+.icon-square{
+  float: left;
+  height: 15px;
+  width: 15px;
+  margin-left: 42px;
+  background-position: -180px -60px;
+}
+.icon-square:hover{
+  background-position: -150px -60px;
+}
+.about-menu .about-backtop{
+  display: block;
+  height:32px;
+  width: 32px;
+  background-color: #dfcfad;
+  border-radius: 4px;
+  margin-left: 34px;
+  margin-top: 30px;
+}
+.about-menu .about-backtop:hover{
+  background-color: #dbc491;
+}
+.about-menu .active .icon-square{
+  background-position: -150px -60px;
+}
+.about-menu .active a{
+  color: #f98818;
+}
+/* 方舟信托 */
+.entrust-service{
+  padding-left: 30px;
+  padding-right: 30px;
+  width: 100%;
+  overflow: hidden;
+}
+.entrust-service ul{
+  width: 1100px;
+}
+.entrust-service li{
+  float: left;
+  width:220px;
+  height: 295px;
+  margin-bottom: 40px;
+  overflow-x: hidden;
+  margin-right: 50px;
+  background-color: #FCFCFC;
+  -webkit-box-shadow: 0 2px 8px rgba(0, 0, 0, .04);
+  -moz-box-shadow: 0 2px 8px rgba(0, 0, 0, .04);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .04);
+}
+.entrust-service .pic{
+  height: 202px;
+  display: block;
+  overflow: hidden;
+}
+.entrust-service li img{
+  min-height: 202px;
+  width: 100%;
+}
+.entrust-service li strong{
+  display: block;
+  font-weight: bold;
+  margin-top: 22px;
+  margin-bottom: 14px;
+  text-align: center;
+  font-size: 20px;
+}
+.entrust-service li strong a{
+  color:#7e6b5a;
+}
+.entrust-service li strong a:hover{
+  color: #f98818;
+}
+.entrust-service .icon-horizontal-1{
+  float: none;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/*诺亚财富_家庭财富*/
+.treasure-manage-center{
+  text-align: center;
+}
+.treasure-manage-center h3{
+  font-size: 30px;
+  margin-bottom: 60px;
+  color: #7e6b5a;
+  font-weight: bold;
+}
+.treasure-manage-center ul{
+  width: 750px;
+  margin-top: 25px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 85px;
+  overflow: hidden;
+  *zoom:1;
+}
+.treasure-manage-center ul li{
+  float: left;
+  width:50%;
+  font-size: 20px;
+  color: #c2ae80;
+  font-weight: bold;
+}
+
+/*诺亚财富_生活服务_融资租赁*/
+.yongchebao{
+  padding: 0 140px 50px;
+  font-size: 14px;
+  color: #666;
+  text-align: justify;
+  font-weight: bold;
+}
+.yongchebao strong{
+  font-size: 24px;
+  color: #8e7463;
+}
+.yongchebao b{
+  font-size: 18px;
+}
+.yongchebao img{
+  float: right;
+  margin-left: 95px;
+}
+
+.yongchebao-example p{
+  font-size: 14px;
+  color: #8e7463;
+  line-height: 45px;
+  font-weight: bold;
+}
+.yongchebao-example p.first{
+  line-height: 24px;
+}
+.yongchebao-example strong{
+  color: #000;
+  font-size: 24px;
+}
+
+/*诺亚财富_生活服务_以诺教育*/
+.banner-main.edu{
+  background-image: url(/resources/images/web/logo-edu.jpg);
+  background-repeat: no-repeat;
+  background-position: right bottom;
+}
+.edu-left{
+  float: left;
+}
+.edu-right{
+  float: right;
+}
+.edu-right img{
+  width:410px;
+  height:235px;
+}
+.edu-right .body{
+  margin-top: 40px;
+}
+.edu-right .body  h4{
+  font-size: 30px;
+  font-weight: bold;
+  color: #c2ae80;
+  margin-bottom: 36px;
+}
+.edu-right .body li{
+  padding-left: 8px;
+  position: relative;
+  font-size: 14px;
+  line-height: 36px;
+}
+.edu-right .body li:before{
+  content:"";
+  position: absolute;
+  left:0;
+  top:18px;
+  width:3px;
+  height:3px;
+  background-color: #F99A4A;
+}
+.edu-right>h4{
+  font-size: 30px;
+  color: #c2ae80;
+  margin-top: 45px;
+  text-align:center;
+  font-weight:300;
+}
+.edu-right>p{
+  margin-top: 18px;
+  font-style: italic;
+  text-align: center;
+  font-size: 18px;
+  line-height: 36px;
+  color: #333;
+  opacity: .65;
+}
+.edu-main>h4 {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #f98818;
+  margin:45px 0 35px;
+}
+.edu-main>p{
+  text-align: center;
+  font-size: 18px;
+  color: #333;
+}
+
+/*2015.6.30*/
+.idea-text b{
+  font-size: 18px;
+  font-family: "微软雅黑";
+  color:#f98818;
+  line-height: 24px;
+}
+.fund-tactics h3 {
+  color: #f98818;
+  margin-bottom: 36px;
+}
+/* 产品与服务-歌斐资产-机构渠道业务 */
+.agency-business{
+  width: 941px;
+  margin: 0 auto;
+  padding-top: 34px;
+}
+.agency-business div{
+  width: 434px;
+}
+.agency-business div p{
+  color: #4d4c4d;
+  line-height: 24px;
+}
+.agency-left{
+  float: left;
+}
+.agency-right{
+  float: right;
+}
+.goal-client{
+  padding-top: 40px;
+  text-align: center;
+}
+.goal-client img{
+ /* width: 100%;
+  height: 100%;*/
+}
+/*股权投资*/
+.invest-idea .pull-right{
+  float: right;
+}
+.invest-award-a{
+ text-align: center;
+  margin-top: 32px;
+}
+.award-list-a{
+  margin: 0 80px;
+}
+.invest-award-a h5{
+  font-size: 24px;
+  line-height: 86px;
+  text-align: left;
+  margin-left: 80px;
+  font-weight: bold;
+  color: #f98818;
+}
+.award-list-a h5{
+  font-size: 24px;
+  line-height: 86px;
+  font-weight: bold;
+  color: #f98818;
+}
+.award-list-a ul{
+  line-height: 30px;
+  font-size: 14px;
+  color: #666;
+}
+/*二级市场 2015/7/7*/
+.fund-idea .pic-right{
+  position: absolute;
+  top: 106px;
+  right: 90px;
+  width: 467px;
+  height: 164px;
+  margin-top: 5px;
+  overflow: hidden;
+}
+.fund-idea .pic-right img{
+  width: 467px;
+  min-height: 164px;
+}
+.fund-idea .idea-left{
+  float: left;
+  margin: 0 506px 0 0;
+}
+.fund-idea .idea-left b{
+  font-size: 14px;
+}
+.invest-list{
+  width: 999px;
+  margin: 0 auto;
+  padding-top: 35px;
+}
+.invest-list li{
+  float: left;
+  width: 283px;
+  margin: 0 25px;
+  overflow: hidden;
+}
+.invest-list li .img-inner{
+  width: 283px;
+  height: 172px;
+  margin-bottom: 22px;
+  overflow: hidden;
+}
+.invest-list li img{
+  width: 283px;
+  height: 172px;
+}
+.invest-list li b{
+  color: #f98818;
+}
+.invest-list li p{
+  margin-top: 25px;
+  color: #666;
+  line-height: 24px;
+}
+.bg-white{
+  background-color: #fff;
+}
+.i-ar{
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 42%;
+  width: 24px;
+  height: 12px;
+  background: url(/resources/images/web//icondown.png) no-repeat center;
+}
+.t-style-3 li.active .i-ar{
+  display: block;
+}
+.about-newsp{
+  background-color: #f8f6ea;
+  margin-top: 10px;
+  line-height: 28px;
+  padding:20px 15px;
+}

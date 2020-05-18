@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="sys_loan_repayplan" >
+
+  <typeAlias type="com.cbai.model.rongyin.ibatis.entity.LoanRepayPlan" alias="LoanRepayPlan"/>
+  
+  <typeAlias type="com.cbai.model.rongyin.sys.loan.vo.LoanRepayPlanVO" alias="LoanRepayPlanVO"/>
+  
+  <select id="SYS-GET-ALLLOANREPAYS" resultClass="LoanRepayPlan">
+      select * from loan_repay_plan as p where p.lnid = #lnid#
+  </select>
+  
+  <select id="SYS-GET-REPLAYREALTIME" resultClass="java.lang.String">
+      select realtime from loan_repay_plan as p where p.rpid = #rpid#
+  </select>
+  
+  <select id="SYS-GET-LOANREPAY-PLAN" resultClass="LoanRepayPlanVO" parameterClass="java.util.Map">
+      select p.rpid as rpid,
+             p.curperiod as curperiod,
+             p.pretime as pretime,
+             p.realrpmoney as realrpmoney,
+             p.realtime as realtime,
+             p.rpmoney as rpmoney,
+             p.state as state,
+             
+             l.lnid as lnid,
+             l.lnnum as lnnum,
+             l.lman as lman,
+             l.lmanphone as phone,
+             l.name as name,
+             l.repaytimes as repaytimes,
+             l.repaytypename as repaytypename
+             
+       from loan_repay_plan as p
+            left join loan_info as l on l.lnid = p.lnid
+       
+       <!-- 
+       <![CDATA[where CURDATE() <= p.pretime]]>
+       -->
+       <![CDATA[ where (l.status = 'FINISH') and (l.payformoney = l.collectmoney)]]>
+       <dynamic>
+            <isNotEmpty prepend="and" property="status">
+                <isEqual property="status" compareValue="REPAYWAIT">
+                <![CDATA[(p.realrpcount < p.rpcount)]]>
+                </isEqual>
+                
+                <isEqual property="status" compareValue="REPAYDONE">
+                <![CDATA[(p.realrpcount = p.rpcount)]]>
+                </isEqual>
+            </isNotEmpty>
+       
+			<isNotEmpty prepend="and" property="name">
+				<![CDATA[l.name like CONCAT('%', #name#, '%')]]>
+			</isNotEmpty>
+	        <isNotNull prepend="and" property="lnid">
+	            <![CDATA[l.lnid = #lnid:INTEGER#]]>
+	        </isNotNull>
+	        <isNotNull prepend="and" property="rpid">
+	            <![CDATA[p.rpid = #rpid:VARCHAR#]]>
+	        </isNotNull>
+		</dynamic>
+        <![CDATA[order by p.pretime asc]]>
+  </select>
+  
+  
+  <update id="SYS-UPDATE-LOANREPAY-PLAN" parameterClass="LoanRepayPlan" >
+    update loan_repay_plan
+    <dynamic prepend="set" >
+    
+      <isNotEmpty prepend="," property="lnid" >
+        lnid = #lnid:INTEGER#
+      </isNotEmpty> 
+      
+      <isNotEmpty prepend="," property="lnnum" >
+        lnnum = #lnnum:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="lmantype" >
+        lmantype = #lmantype:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="lman" >
+        lman = #lman:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="lusrcustid" >
+        lusrcustid = #lusrcustid:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="loantime" >
+        loantime = #loantime:TIMESTAMP#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="pretime" >
+        pretime = #pretime:TIMESTAMP#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="realtime" >
+        realtime = #realtime:TIMESTAMP#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="," property="rpmoney" >
+        rpmoney = #rpmoney:INTEGER#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="realrpcount" >
+        realrpcount = #realrpcount:INTEGER#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="realrpmoney" >
+        realrpmoney = #realrpmoney:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="state" >
+        state = #state:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="memo" >
+        memo = #memo:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="opuid" >
+        opuid = #opuid:INTEGER#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="optime" >
+        optime = #optime:TIMESTAMP#
+      </isNotEmpty>
+      
+    </dynamic>
+    where rpid = #rpid:INTEGER#
+  </update>
+  
+  
+  <insert id="SYS-ADD-LOANREPAY-PLAN" parameterClass="LoanRepayPlan">
+    <![CDATA[
+    insert into loan_repay_plan (
+		rpid,
+        curperiod,
+        curdates,
+        lnid,
+        lnnum,
+        lmantype,
+        lman,
+        lusrcustid,
+        pretime,
+        realtime,
+        rpmoney,
+        rpcount,
+        realrpcount,
+        realrpmoney,
+        state,
+        memo,
+        opuid,
+        optime)
+    values (
+		#rpid:INTEGER#,
+		#curperiod:INTEGER#,
+		#curdates:INTEGER#,
+		#lnid:INTEGER#,
+		#lnnum:VARCHAR#,
+		#lmantype:VARCHAR#,
+		#lman:VARCHAR#,
+		#lusrcustid:VARCHAR#,
+		#pretime:TIMESTAMP#,
+		#realtime:TIMESTAMP#,
+		#rpmoney:INTEGER#,
+		#rpcount:INTEGER#,
+		#realrpcount:INTEGER#,
+		#realrpmoney:INTEGER#,
+		#state:VARCHAR#,
+		#memo:VARCHAR#,
+		#opuid:INTEGER#,
+		#optime:TIMESTAMP#)
+    ]]>
+    
+    <selectKey resultClass="int" type="post" keyProperty="rpid" >  
+         select @@IDENTITY as value  
+    </selectKey>
+  </insert>
+  
+	
+</sqlMap>

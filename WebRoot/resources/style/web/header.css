@@ -1,0 +1,38 @@
+@charset "utf-8";
+/* CSS Document */
+/*header*/
+.top{ width:1400px; margin:auto;}
+.top_1{height:30px;  background:#f9f9f9; padding-left:760px;}
+.top_1 div{ float:left; margin-right:6px;}
+.top_1 div a:hover{ color:#ee5e25;}
+.top_1 .top_1_div{ line-height:30px;}
+.top_1 a{ line-height:30px; display:block; display:inline-block;color:#a4a4a4;}
+.top_1 span{ font-size:18px; color:#f98818; line-height:30px;}
+.top_2{ height:95px; overflow:hidden;}
+.top_2 .top_2_logo{ padding-top:25px; padding-left:80px; float:left;}
+.top_2 ul{ float:right;}
+.top_2 ul li{ float:left; width:140px; height:95px; font-size:16px; line-height:95px; text-align:center;}
+
+.top_2 ul li{ position:relative;}
+.top_2.on ul li span{background:#f98818;}
+.top_2.on ul li .active span{  display:block; position:absolute;  left:0%; width:100%; height:px;}
+
+
+.top_2 ul li a{ display:block; height:95px;}
+.top_2 ul li a:hover{ color:#f98818;}
+
+.top_2 ul li span{ display:block; position:absolute; width:0px; height:0px; background:#f98818; top:92px; left:50%;}
+.top_2 ul li .active span{  display:block; position:absolute;  left:0%; width:100%; height:3px;}
+
+.top_2_hovon a{color:#f98818;}
+.top_2_hovon span{width:100%; height:3px; background:#f98818;}
+
+
+.top_two{ width:100%; }
+.top_two_1{ width:100%; height:105px; background:#fff; margin:auto; border-bottom:1px solid #cfced0; }
+.top_two_1_c{ width:990px; margin:auto;}
+.top_two_1_c img{ margin-top:34px; margin-left:0px;}
+.top_two_1_c a{ display:block; float:right; font-size:20px; color:#666666; margin-right:15px; margin-top:40px; font-weight:normal;}
+.top_two_1_c a:hover{ color:#ee5e25;}
+
+

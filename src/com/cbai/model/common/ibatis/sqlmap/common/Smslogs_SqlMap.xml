@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+ <sqlMap namespace="smslogs" >
+
+ <typeAlias type="com.cbai.model.common.ibatis.entity.Smslogs" alias="Smslogs"/>
+ 
+   
+  <insert id="insert" parameterClass="Smslogs" >
+    insert into smslogs (rid, phone,vcode,type,sendtime)
+    values (#rid:INTEGER#, #phone:VARCHAR#, #vcode:VARCHAR#, #type:VARCHAR#, #sendtime:TIMESTAMP#)
+  </insert>
+  
+  <select id="getCount" resultClass="java.lang.Integer" parameterClass="java.lang.String" >
+  select count(*) from smslogs  where phone = #phone# and DATE_FORMAT(sendtime,'%Y%m%d')=DATE_FORMAT(now(),'%Y%m%d') 
+  </select>    
+  
+  <select id="getCountByType" resultClass="java.lang.Integer" parameterClass="java.util.Map" >
+  select count(*) from smslogs where phone = #phone# and DATE_FORMAT(sendtime,'%Y%m%d')=DATE_FORMAT(now(),'%Y%m%d') and type = #type#
+  </select>   
+</sqlMap>

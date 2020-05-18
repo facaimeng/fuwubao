@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="company_info" >
+
+ <typeAlias type="com.cbai.model.rongyin.ibatis.entity.CompanyInfo" alias="CompanyInfo"/>
+ 
+ <typeAlias type="com.cbai.model.rongyin.sys.users.vo.CompanySearchVO" alias="CompanySearchVO"/>
+  
+  <insert id="insert" parameterClass="CompanyInfo" >
+    insert into company_info (cmid, cmnum, usrcustid, ctype, name, orgnum, taxnum, licnum,
+      regaddress, realaddress, contactphone, foundate, busperiod, dutyman, dutyidnum, dutyphone,
+      bkabbr, bkname, bkaddress, bkcardnum, contactman, contactidnum,ofenmanphone, regcapital, mainbus, busstate,
+      memo, addtime, state,audit_stat, audit_desc)
+    values (#cmid:INTEGER#, #cmnum:VARCHAR#, #usrcustid:VARCHAR#, #ctype:VARCHAR#, #name:VARCHAR#,
+      #orgnum:VARCHAR#, #taxnum:VARCHAR#, #licnum:VARCHAR#, #regaddress:VARCHAR#,
+      #realaddress:VARCHAR#, #contactphone:VARCHAR#, #foundate:DATE#, #busperiod:VARCHAR#,
+      #dutyman:VARCHAR#, #dutyidnum:VARCHAR#, #dutyphone:VARCHAR#, #bkabbr:VARCHAR#,
+      #bkname:VARCHAR#, #bkaddress:VARCHAR#, #bkcardnum:VARCHAR#, #contactman:VARCHAR#,
+      #contactidnum:VARCHAR#, #ofenmanphone:VARCHAR#,#regcapital:VARCHAR#, #mainbus:VARCHAR#, #busstate:VARCHAR#,
+      #memo:VARCHAR#, #addtime:TIMESTAMP#, #state:VARCHAR#,#auditStat:VARCHAR#, #auditDesc:VARCHAR#)
+  </insert>
+  
+  <select id="getCompanyName" resultClass="java.lang.String" parameterClass="java.lang.String">
+    select name from company_info where usrcustid = #usrcustid#
+  </select>
+  
+  <select id="getAll" resultClass="CompanyInfo" parameterClass="CompanySearchVO"> 
+    select * from company_info
+    <dynamic prepend="where" >
+      <isNotEmpty prepend="and" property="t" >
+        ctype = #t#
+      </isNotEmpty> 
+      <isNotEmpty prepend="and" property="usrcustid" >
+        usrcustid like CONCAT('%',#usrcustid#,'%')
+      </isNotEmpty>   
+      <isNotEmpty prepend="and" property="name" >
+        name like CONCAT('%',#name#,'%')
+      </isNotEmpty>  
+      <isNotEmpty prepend="and" property="state" >
+        state = #state#
+      </isNotEmpty> 
+      <isNotEmpty prepend="and" property="ifopen" >
+        <isEqual property="ifopen" compareValue="y"> 
+			usrcustid is not null
+		</isEqual>
+		<isEqual property="ifopen" compareValue="n">  
+			usrcustid is null
+		</isEqual> 
+      </isNotEmpty> 
+      <isNotEmpty prepend="and" property="dutyman" >
+        dutyman like CONCAT('%',#dutyman#,'%')
+      </isNotEmpty> 
+    </dynamic>
+    order by addtime desc
+  </select>
+  
+  <select id="getByState" resultClass="CompanyInfo" parameterClass="java.lang.String" >
+    select cmid,name,licnum,usrcustid from company_info where state=#state# and ctype='COM' order by addtime desc
+  </select>
+  
+   <select id="getOne" resultClass="CompanyInfo" parameterClass="java.lang.Integer"> 
+    select * from company_info where cmid = #cmid:INTEGER#
+   </select>
+   
+   <select id="getSimpleOne" resultClass="CompanyInfo" parameterClass="java.lang.Integer"> 
+    select cmnum,usrcustid,licnum,ctype from company_info where cmid = #cmid:INTEGER#
+   </select>
+  
+  <update id="update" parameterClass="CompanyInfo" >
+    update company_info
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="cmnum" >
+        cmnum = #cmnum:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="usrcustid" >
+        usrcustid = #usrcustid:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="ctype" >
+        ctype = #ctype:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="name" >
+        name = #name:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="orgnum" >
+        orgnum = #orgnum:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="taxnum" >
+        taxnum = #taxnum:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="licnum" >
+        licnum = #licnum:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="regaddress" >
+        regaddress = #regaddress:VARCHAR#
+      </isNotNull>
+       <isNotNull prepend="," property="ofenmanphone" >
+        ofenmanphone = #ofenmanphone:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="realaddress" >
+        realaddress = #realaddress:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="contactphone" >
+        contactphone = #contactphone:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="foundate" >
+        foundate = #foundate:DATE#
+      </isNotNull>
+      <isNotNull prepend="," property="busperiod" >
+        busperiod = #busperiod:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="dutyman" >
+        dutyman = #dutyman:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="dutyidnum" >
+        dutyidnum = #dutyidnum:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="dutyphone" >
+        dutyphone = #dutyphone:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="bkabbr" >
+        bkabbr = #bkabbr:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="bkname" >
+        bkname = #bkname:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="state" >
+        state = #state:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="bkaddress" >
+        bkaddress = #bkaddress:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="bkcardnum" >
+        bkcardnum = #bkcardnum:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="contactman" >
+        contactman = #contactman:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="contactidnum" >
+        contactidnum = #contactidnum:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="regcapital" >
+        regcapital = #regcapital:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="mainbus" >
+        mainbus = #mainbus:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="busstate" >
+        busstate = #busstate:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="memo" >
+        memo = #memo:VARCHAR#
+      </isNotNull> 
+      <isNotNull prepend="," property="auditStat" >
+        audit_stat = #auditStat:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="auditDesc" >
+        audit_desc = #auditDesc:VARCHAR#
+      </isNotNull>
+    </dynamic>
+    where cmid = #cmid:INTEGER#
+  </update>
+  
+  <update id="updateFromHuifu" parameterClass="CompanyInfo" >
+    update company_info
+    <dynamic prepend="set" > 
+      <isNotNull prepend="," property="usrcustid" >
+        usrcustid = #usrcustid:VARCHAR#
+      </isNotNull> 
+      <isNotNull prepend="," property="bkabbr" >
+        bkabbr = #bkabbr:VARCHAR#
+      </isNotNull> 
+      <isNotNull prepend="," property="bkcardnum" >
+        bkcardnum = #bkcardnum:VARCHAR#
+      </isNotNull> 
+      <isNotNull prepend="," property="auditStat" >
+        audit_stat = #auditStat:VARCHAR#
+      </isNotNull>
+    </dynamic>
+    where cmnum = #cmnum:INTEGER#
+  </update>
+</sqlMap>

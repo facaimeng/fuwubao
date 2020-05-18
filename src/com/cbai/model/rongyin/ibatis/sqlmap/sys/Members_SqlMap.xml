@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="members" > 
+
+  <typeAlias type="com.cbai.model.rongyin.ibatis.entity.Members" alias="Members"/>
+ 
+  <typeAlias type="com.cbai.model.rongyin.sys.users.vo.MemberSearchVO" alias="MemberSearchVO"/>  
+  
+  <typeAlias type="com.cbai.model.rongyin.sys.users.vo.MemDadVO" alias="MemDadVO"/> 
+  
+  <typeAlias type="com.cbai.model.rongyin.sys.users.vo.MemAccountVO" alias="MemAccountVO"/> 
+   
+  <resultMap id="memMap" class="Members" >
+  	<result property="memid" column="memid"/>
+  	<result property="memnum" column="memnum"/>
+  	<result property="phone" column="phone"/>
+  	<result property="realname" column="realname"/>
+  	<result property="idnum" column="idnum"/>  
+  	<result property="usrcustid" column="usrcustid"/>
+  	<result property="usrcustname" column="usrcustname"/>
+  	<result property="state" column="state"/>
+  	<result property="dadmemid" column="dadmemid"/> 
+  	<result property="dadtype" column="dadtype"/>
+  	<result property="ifbind" column="ifbind"/>
+  	<result property="iffreeze" column="iffreeze"/>
+  	<result property="ifbus" column="ifbus"/>
+  	<result property="sex" column="sex"/>
+  	<result property="birth" column="birth"/>
+  	<result property="avlmoney" column="{memid=memid,calcDead=calcDead}" select="members.getAvlMoney"/> 
+  	<result property="bidingmoney" column="{memid=memid,calcDead=calcDead}" select="members.getBiding"/>
+  	<result property="allbidmoney" column="{memid=memid,calcDead=calcDead}" select="members.getBidAll"/>
+  	<result property="regtime" column="regtime"/>
+  	<result property="authtime" column="authtime"/>  
+  	<result property="dadinfo" column="{dadtype=dadtype,dadmemid=dadmemid}" select="members.getDad"/> 
+  </resultMap>
+  
+  <resultMap id="dadMap" class="MemDadVO" >  
+  	<result property="phone" column="phone"/>
+  	<result property="realname" column="realname"/>  
+  	<result property="mytype" column="mytype"/>
+	<result property="dadtype" column="dadtype"/>
+	<result property="dadmemid" column="dadmemid"/> 
+	<result property="state" column="state"/>
+  	<result property="dadinfo" column="{dadtype=dadtype,dadmemid=dadmemid}" select="members.getGrand"/>
+  </resultMap> 
+   
+  <select id="getAccinfo" resultClass="MemAccountVO" parameterClass="java.util.HashMap"> 
+		select avlmoney from mem_account where memid=#memid#
+  </select>
+  
+  <select id="getDad" resultMap="dadMap" parameterClass="java.util.HashMap"> 
+		<dynamic >
+		      <isNotEmpty property="dadtype" >
+			        <isEqual property="dadtype" compareValue="2"> 
+						 select '2' as mytype,dadtype,dadmemid,phone,realname,usrcustid,state from  members where phone=#dadmemid#
+					</isEqual>
+					<isEqual property="dadtype" compareValue="1"> 
+						 select '1' as mytype,'0' as dadtype,'0' as dadmemid,phone,realname,usrcustid,state from  per_users where phone=#dadmemid#
+					</isEqual> 
+		      </isNotEmpty>  
+	    </dynamic>  
+  </select>
+   
+  <select id="getGrand" resultClass="MemDadVO" parameterClass="java.util.HashMap">
+		select phone,realname,usrcustid,state
+		 <dynamic >
+		      <isNotEmpty property="dadtype" >
+			        <isEqual property="dadtype" compareValue="2"> 
+						 ,'2' as mytype from  members where phone=#dadmemid#
+					</isEqual>
+					<isEqual property="dadtype" compareValue="1"> 
+						 ,'1' as mytype from per_users where phone=#dadmemid# 
+					</isEqual> 
+					<isEqual property="dadtype" compareValue="0"> 
+						 from per_users where phone=#dadmemid# 
+					</isEqual> 
+		      </isNotEmpty>  
+	    </dynamic> 
+  </select>
+  
+  <select id="getAvlMoney" resultClass="java.lang.Long" parameterClass="java.util.HashMap"> 
+  		 <dynamic >
+  		 	<isEmpty property="calcDead" >
+  		 		select avlmoney from mem_account where memid=#memid#
+  		 	</isEmpty>
+  		 	<isNotEmpty property="calcDead" >
+  		 		select curbalance as avlmoney  from mem_account_logs where memid=#memid# and optime <![CDATA[ <= ]]> #calcDead# limit 0,1
+  		 	</isNotEmpty>
+  		 </dynamic> 
+  </select> 
+  
+  <select id="getBiding" resultClass="java.lang.Long" parameterClass="java.util.HashMap"> 
+  	   select sum(bidmoney) as bidingmoney from mem_bid_logs where memid=#memid# and repaymoney = 0
+  	   <dynamic > 
+	      	 <isNotEmpty prepend="and" property="calcDead" >
+	         	   optime <![CDATA[ <= ]]> #calcDead#
+	      	 </isNotEmpty>
+  	   </dynamic> 
+  </select>
+  
+  <select id="getBidAll" resultClass="java.lang.Long" parameterClass="java.util.HashMap"> 
+  	   select sum(bidmoney) as allbidmoney from mem_bid_logs where memid=#memid#
+  	   <dynamic > 
+	      	 <isNotEmpty prepend="and" property="calcDead" >
+	         	   optime <![CDATA[ <= ]]> #calcDead#
+	      	 </isNotEmpty>
+  	   </dynamic> 
+  </select>
+    
+  <select id="getAll" resultMap="memMap" parameterClass="MemberSearchVO"> 
+    select *, #calcDead# as calcDead from members as m
+    <dynamic prepend="where" >
+      <isNotEmpty prepend="and" property="ifbind" >
+        ifbind = #ifbind#
+      </isNotEmpty>
+      <isNotEmpty prepend="and" property="iffreeze" >
+        iffreeze = #iffreeze#
+      </isNotEmpty> 
+      <isNotEmpty prepend="and" property="ifbus" >
+        ifbus = #ifbus#
+      </isNotEmpty> 
+      <isNotEmpty prepend="and" property="ifloanman" >
+        ifloanman = #ifloanman#
+      </isNotEmpty>    
+      <isNotEmpty prepend="and" property="realname" >
+        realname like CONCAT('%',#realname#,'%')
+      </isNotEmpty>  
+      <isNotEmpty prepend="and" property="idnum" >
+        idnum like CONCAT('%',#idnum#,'%')
+      </isNotEmpty> 
+      <isNotEmpty prepend="and" property="phone" >
+        phone like CONCAT('%',#phone#,'%')
+      </isNotEmpty> 
+      <isNotEmpty prepend="and" property="state" >
+        state = #state#
+      </isNotEmpty>  
+      <isNotEmpty prepend="and" property="birthStart" >
+	        birth <![CDATA[ >= ]]> #birthStart#
+	  </isNotEmpty>  
+      <isNotEmpty prepend="and" property="birthEnd" >
+       		birth <![CDATA[ <= ]]> #birthEnd#
+      </isNotEmpty> 
+      <isNotEmpty prepend="and" property="regStart" >
+	        regtime <![CDATA[ >= ]]> #regStart#
+	  </isNotEmpty>  
+      <isNotEmpty prepend="and" property="regEnd" >
+       		regtime <![CDATA[ <= ]]> #regEnd#
+      </isNotEmpty> 
+      <isNotEmpty prepend="and" property="openStart" >
+	        authtime <![CDATA[ >= ]]> #openStart#
+	  </isNotEmpty>  
+      <isNotEmpty prepend="and" property="openEnd" >
+       		authtime <![CDATA[ <= ]]> #openEnd#
+      </isNotEmpty>  
+      
+    </dynamic>
+    order by regtime desc
+  </select>
+  
+  <select id="getByState" resultClass="Members" parameterClass="java.lang.String" >
+    select memid,realname,phone,usrcustid from members where state=#state# order by regtime desc
+  </select>
+  
+  <select id="getMemRealname" resultClass="java.lang.String" parameterClass="java.lang.String" >
+    select realname from members where usrcustid = #usrcustid#
+  </select>
+  
+  <select id="getOne" resultClass="Members"  > 
+  	select * from members where memid=#memid#
+  </select>
+  <update id="upDad" parameterClass="java.util.Map">
+  		update members set dadmemid=#phone# where dadmemid=#oldphone# and dadtype=#mytype#
+  </update>
+  <update id="update" parameterClass="Members" >
+    update members
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="memnum" >
+        memnum = #memnum:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="openid" >
+        openid = #openid:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="phone" >
+        phone = #phone:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="nickname" >
+        nickname = #nickname:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="realname" >
+        realname = #realname:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="idnum" >
+        idnum = #idnum:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="logpwd" >
+        logpwd = #logpwd:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="paypwd" >
+        paypwd = #paypwd:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="usrcustid" >
+        usrcustid = #usrcustid:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="usrcustname" >
+        usrcustname = #usrcustname:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="headimgurl" >
+        headimgurl = #headimgurl:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="email" >
+        email = #email:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="state" >
+        state = #state:VARCHAR#
+      </isNotNull> 
+      <isNotNull prepend="," property="invitecount" >
+        invitecount = #invitecount:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="dadmemid" >
+        dadmemid = #dadmemid:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="dadname" >
+        dadname = #dadname:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="ifbind" >
+        ifbind = #ifbind:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="dadtype" >
+        dadtype = #dadtype:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="cfrom" >
+        cfrom = #cfrom:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="lpwderrorcount" >
+        lpwderrorcount = #lpwderrorcount:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="ppwderrorcount" >
+        ppwderrorcount = #ppwderrorcount:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="ifloanman" >
+        ifloanman = #ifloanman:VARCHAR#
+      </isNotNull>
+       <isNotNull prepend="," property="iffreeze" >
+        iffreeze = #iffreeze:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="address" >
+        address = #address:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="urgentman" >
+        urgentman = #urgentman:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="locktime" >
+        locktime = #locktime:TIMESTAMP#
+      </isNotNull>
+      <isNotNull prepend="," property="regtime" >
+        regtime = #regtime:TIMESTAMP#
+      </isNotNull>
+      <isNotNull prepend="," property="authtime" >
+        authtime = #authtime:TIMESTAMP#
+      </isNotNull>
+      <isNotNull prepend="," property="dadmemid" >
+        dadmemid = #dadmemid:VARCHAR#
+      </isNotNull>
+    </dynamic>
+    where memid = #memid:INTEGER#
+  </update>
+</sqlMap>

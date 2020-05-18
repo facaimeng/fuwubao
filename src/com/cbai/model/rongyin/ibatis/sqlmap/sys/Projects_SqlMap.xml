@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="projects">
+  
+  <typeAlias type="com.cbai.model.rongyin.ibatis.entity.Projects"  alias="Projects" />
+  
+  <typeAlias type="com.cbai.model.rongyin.sys.projects.vo.ProjectSearchVO" alias="ProjectSearchVO"/>
+ 
+  <insert id="insert" parameterClass="Projects">
+    insert into projects (proid,prtype, pronum, address,area,htype,decorate,protype,allprice,exprice,avgprice,coordinate,memo, state, addtime, opuid,opuname)
+    values (#proid:INTEGER#,#prtype:VARCHAR#, #pronum:VARCHAR#, #address:VARCHAR#,#area:VARCHAR#,#htype:VARCHAR#, #decorate:VARCHAR#,#protype:VARCHAR#, 
+      #allprice:LONG#,#exprice:LONG#,#avgprice:LONG#, #coordinate:VARCHAR#, #memo:VARCHAR#, #state:VARCHAR#, #addtime:TIMESTAMP#, #opuid:INTEGER#,#opuname:VARCHAR#)
+      <selectKey resultClass="int" type="post" keyProperty="proid" >  
+         select @@IDENTITY as value  
+      </selectKey>
+  </insert> 
+  
+  <select id="getAll" resultClass="Projects" parameterClass="ProjectSearchVO"> 
+    select p.*  from projects as p  
+    <dynamic prepend="where" >
+      <isNotEmpty prepend="and" property="opuid" >
+        p.opuid = #opuid#
+      </isNotEmpty>
+      <isNotEmpty  property="pronum" >
+        p.pronum like CONCAT('%',#pronum#,'%')
+      </isNotEmpty>      
+      <isNotEmpty prepend="and" property="address" >
+        p.address like CONCAT('%',#address#,'%')
+      </isNotEmpty>  
+      <isNotEmpty prepend="and" property="state" >
+        p.state = #state#
+      </isNotEmpty>  
+      <isNotEmpty prepend="and" property="prtype" >
+        p.prtype = #prtype#
+      </isNotEmpty>
+      <isNotEmpty prepend="and" property="st" >
+        <isEqual property="st" compareValue="0"> 
+			p.state = 'NOCHECK' or p.state='UNPASS'
+		</isEqual>
+		<isEqual property="st" compareValue="1">  
+			p.state != 'NOCHECK' and p.state!='UNPASS'
+		</isEqual> 
+      </isNotEmpty>
+    </dynamic>
+    order by p.addtime desc
+  </select> 
+  
+  <select id="getOne" resultClass="Projects" > 
+    select * from projects where proid = #proid#
+  </select> 
+  
+  <update id="update" parameterClass="Projects">
+    update projects
+    <dynamic prepend="set">
+      <isNotNull prepend="," property="prtype">
+        prtype = #prtype:VARCHAR#
+      </isNotNull> 
+      <isNotNull prepend="," property="pronum">
+        pronum = #pronum:VARCHAR#
+      </isNotNull> 
+      <isNotNull prepend="," property="address">
+        address = #address:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="area">
+        area = #area:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="htype">
+        htype = #htype:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="decorate">
+        decorate = #decorate:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="protype">
+        protype = #protype:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="allprice">
+        allprice = #exprice:LONG#
+      </isNotNull>
+      <isNotNull prepend="," property="exprice">
+        exprice = #exprice:LONG#
+      </isNotNull>
+      <isNotNull prepend="," property="avgprice">
+        avgprice = #avgprice:LONG#
+      </isNotNull>
+      <isNotNull prepend="," property="coordinate">
+        coordinate = #coordinate:VARCHAR#
+      </isNotNull> 
+      <isNotNull prepend="," property="memo">
+        memo = #memo:VARCHAR#
+      </isNotNull>
+       <isNotNull prepend="," property="ckmemo">
+        ckmemo = #ckmemo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="state">
+        state = #state:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="coverurl">
+        coverurl = #coverurl:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="addtime">
+        addtime = #addtime:TIMESTAMP#
+      </isNotNull>
+      <isNotNull prepend="," property="checktime">
+        checktime = #checktime:TIMESTAMP#
+      </isNotNull>
+      <isNotNull prepend="," property="opuid">
+        opuid = #opuid:INTEGER#
+      </isNotNull> 
+    </dynamic>
+    where proid = #proid:INTEGER#
+  </update>
+
+  
+  <select id="SYS-GET-PROJECTS" parameterClass="java.util.Map" resultClass="Projects">
+      select * from projects as p
+      <dynamic prepend="where">
+          <isNotNull prepend="and" property="proId">
+              proid = #proId:VARCHAR#
+          </isNotNull>
+          <isNotNull prepend="and" property="state">
+              state = #state:VARCHAR#
+          </isNotNull>
+      </dynamic>
+      order by addtime desc
+  </select>
+  
+
+  <update id="SYS-UPDATE-PROJECTS" parameterClass="Projects">
+    <![CDATA[update projects]]>
+    <dynamic prepend="set">
+      <isNotEmpty prepend="," property="state">
+        state = #state:VARCHAR#
+      </isNotEmpty> 
+    </dynamic>
+    <![CDATA[where proid = #proid:INTEGER#]]>
+  </update>
+ 
+</sqlMap>

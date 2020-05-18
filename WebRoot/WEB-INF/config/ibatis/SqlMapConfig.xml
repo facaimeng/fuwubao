@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMapConfig 
+    PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN" 
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+	<settings cacheModelsEnabled="true" enhancementEnabled="true"
+		lazyLoadingEnabled="true" errorTracingEnabled="true" maxRequests="256"
+		maxSessions="64" maxTransactions="32"  useStatementNamespaces="true"/>
+	
+	<!-- @admin start -->  
+	<sqlMap resource="com/cbai/model/common/ibatis/sqlmap/permisson/*_SqlMap.xml"/>
+	
+	<sqlMap resource="com/cbai/model/common/ibatis/sqlmap/common/*_SqlMap.xml"/>
+	
+	<sqlMap resource="com/cbai/model/rongyin/ibatis/sqlmap/sys/*_SqlMap.xml"/>
+	<!-- @admin end -->
+
+	<!--
+	<sqlMap resource="com/cbai/common/wx/framework/dto/*_SqlMap.xml"/>
+	--> 
+	
+	<!-- @front start --> 
+	<sqlMap resource="com/cbai/model/rongyin/ibatis/sqlmap/pc/*_SqlMap.xml"/>
+    <!-- @front end --> 
+    
+</sqlMapConfig>

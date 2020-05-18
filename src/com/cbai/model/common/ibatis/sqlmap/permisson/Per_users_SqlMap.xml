@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="per_users" >
+
+  <typeAlias type="com.cbai.model.common.ibatis.entity.PerUsers" alias="PerUsers"/> 
+  
+  <typeAlias type="com.cbai.model.common.permission.vo.PerUserSearchVO" alias="PerUserSearchVO"/> 
+
+  <insert id="insert" parameterClass="PerUsers" >
+    insert into per_users (userid,pdid,realname,sex,password, birthday, comefrom, joindate,quitdate,quitmemo, idnum, phone, qqnum, rate1,rate2,memo,state, addtime,usrcustid)
+    values (#userid:INTEGER#,#pdid:INTEGER#, #realname:VARCHAR#, #sex:VARCHAR#,#password:VARCHAR#, #birthday:DATE#, #comefrom:VARCHAR#, 
+      #joindate:DATE#, #quitdate:DATE#,#quitmemo:VARCHAR#,#idnum:VARCHAR#, #phone:VARCHAR#, #qqnum:VARCHAR#,#rate1:VARCHAR#,#rate2:VARCHAR#,#memo:VARCHAR#,#state:VARCHAR#,#addtime:TIMESTAMP#,#usrcustid:VARCHAR#)
+      <selectKey resultClass="int" type="post" keyProperty="userid" >  
+       select @@IDENTITY as value  
+      </selectKey>
+  </insert>
+  
+  <select id="getAll" resultClass="PerUsers" parameterClass="PerUserSearchVO" >
+		select u.*,a.name as depname
+		from per_users as u,per_department as a
+		where a.pdid=u.pdid
+		<dynamic >
+			<isNotEmpty prepend="and" property="realname">
+				u.realname like CONCAT('%', #realname#, '%')
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="phone">
+				u.phone like CONCAT('%', #phone#, '%')
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="idnum">
+				u.idnum like CONCAT('%', #idnum#, '%')
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="sex">
+				u.sex=#sex#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="state">
+				u.state=#state#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="pdid">
+				u.pdid=#pdid#
+			</isNotEmpty>
+		</dynamic>
+		order by u.addtime desc
+	</select>
+  
+  <select id="getAll1" resultClass="PerUsers" parameterClass="java.util.Map" >
+		select u.realname,a.phone,u.qqnum ,u.addtime,a.loginname,a.lastlogin,a.state,a.accid
+		from per_users as u,per_account as a
+		where a.userid=u.userid and a.utype=0
+		<dynamic >
+			<isNotEmpty prepend="and" property="realname">
+				u.realname like CONCAT('%', #realname#, '%')
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="loginname">
+				a.loginname like CONCAT('%', #loginname#, '%')
+			</isNotEmpty>
+		</dynamic>
+		order by u.addtime desc
+	</select>
+	
+    <select id="getOne" resultClass="PerUsers" >
+		select * from per_users where userid =  #userid#
+	</select>
+	
+	<select id="phoneIsExist" resultClass="java.lang.Integer" >
+     select count(*) from per_users where phone = #phone#
+    </select>
+	
+	<update id="updateOne" parameterClass="PerUsers" >
+		update per_users
+		<dynamic prepend="set" >  
+		    <isNotNull prepend="," property="pdid" >
+			  pdid = #pdid:INTEGER#
+			</isNotNull>
+			<isNotNull prepend="," property="realname" >
+			  realname = #realname:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="usrcustid" >
+			  usrcustid = #usrcustid:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="sex" >
+			  sex = #sex:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="password" >
+			  password = #password:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="birthday" >
+			  birthday = #birthday:DATE#
+			</isNotNull>
+			<isNotNull prepend="," property="comefrom" >
+			  comefrom = #comefrom:VARCHAR#
+			</isNotNull> 
+			<isNotNull prepend="," property="joindate" >
+			  joindate = #joindate:DATE#
+			</isNotNull>
+			<isNotNull prepend="," property="quitdate" >
+			  quitdate = #quitdate:DATE#
+			</isNotNull>
+			<isNotNull prepend="," property="quitmemo" >
+			  quitmemo = #quitmemo:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="idnum" >
+			  idnum = #idnum:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="state" >
+			  state = #state:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="phone" >
+			  phone = #phone:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="qqnum" >
+			  qqnum = #qqnum:VARCHAR#
+			</isNotNull> 
+			<isNotNull prepend="," property="rate1" >
+			  rate1 = #rate1:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="rate2" >
+			  rate2 = #rate2:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="memo" >
+			  memo = #memo:VARCHAR#
+			</isNotNull> 
+		</dynamic>
+		where userid = #userid:INTEGER#
+	</update>
+   
+</sqlMap>

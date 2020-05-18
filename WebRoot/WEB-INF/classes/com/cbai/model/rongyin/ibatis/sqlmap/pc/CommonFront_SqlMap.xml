@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="common_front" >
+
+    <typeAlias type="com.cbai.model.rongyin.ibatis.entity.News" alias="News"/>
+      
+  
+    <select id="getNewsIndex" resultClass="News" parameterClass="java.util.Map" >
+		select nid,ntype,coverurl,viewcount,title, pubtime, pdescription, ifindex from news
+		<dynamic prepend="where">
+			<isNotEmpty property="ntype">
+				ntype=#ntype#
+			</isNotEmpty>
+			<isNotEmpty property="ifindex">
+				ifindex=#ifindex#
+			</isNotEmpty>  
+		</dynamic> 
+		order by pubtime desc
+	</select>
+ 
+    <select id="getNewsYears" resultClass="java.lang.String" parameterClass="java.util.Map" >
+		select DISTINCT YEAR(pubtime) from news where ntype=#ntype# and pubtime is not null order by pubtime desc
+	</select>
+	
+    <select id="getNewsAll" resultClass="News" parameterClass="java.util.Map" >
+		select nid,ntype,coverurl,viewcount,title, pubtime, pdescription,content from news
+		where ntype= #ntype# 
+		<dynamic >
+			<isNotEmpty prepend="and" property="year"> 
+				<isEqual property="year" compareValue="-1"> 
+					DATE_FORMAT(pubtime, "%Y")<![CDATA[ < ]]> #byear#
+				</isEqual>
+				<isNotEqual property="year" compareValue="-1">
+					DATE_FORMAT(pubtime, "%Y")=#year#
+				</isNotEqual>
+			</isNotEmpty> 
+		</dynamic>
+		order by pubtime desc
+	</select>
+ 
+	<select id="getNewsOne" resultClass="News" parameterClass="java.lang.Integer" >
+		select * from news where nid =  #nid#
+	</select>
+	
+	<select id="getNewsPre" resultClass="News" parameterClass="java.util.Map" >
+		select nid,title from news where nid <![CDATA[ < ]]>  #nid# and ntype=#ntype# order by nid desc limit 0,1
+	</select>
+	
+	<select id="getNewsNext" resultClass="News" parameterClass="java.util.Map" >
+		select nid,title from news where nid <![CDATA[ > ]]>  #nid# and ntype=#ntype# order by sindex asc limit 0,1
+	</select> 
+	
+	<update id="upNewsViewCount" parameterClass="java.lang.Integer">
+		update news set viewcount = viewcount+1
+		where nid = #nid:INTEGER#
+	</update>
+	
+</sqlMap>

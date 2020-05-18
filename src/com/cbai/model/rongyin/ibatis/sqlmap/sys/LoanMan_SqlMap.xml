@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="loanman" > 
+
+  <typeAlias type="com.cbai.model.rongyin.ibatis.entity.LoanMan" alias="Loanman"/>
+ 
+  <typeAlias type="com.cbai.model.rongyin.sys.users.vo.LoanmanSearchVO" alias="LoanmanVO"/>
+
+  <insert id="insert" parameterClass="Loanman" >
+    insert into loanman (lmid,lmtype,name,phone,idnum,usrcustid, usrcustname,state,address, urgentman,addtime)
+    values (#lmid:INTEGER#,#lmtype:VARCHAR#,#name:VARCHAR#, #phone:VARCHAR#,#idnum:VARCHAR#,
+      #usrcustid:VARCHAR#, #usrcustname:VARCHAR#,#state:VARCHAR#, #address:VARCHAR#,#urgentman:VARCHAR#, #addtime:TIMESTAMP#)
+  </insert> 
+  
+  <select id="loanManRealname" resultClass="java.lang.String"> 
+    select name from loanman where usrcustid = #dusrcustid#
+  </select>
+  
+  <select id="getAll" resultClass="Loanman" parameterClass="LoanmanVO"> 
+    select * from loanman
+    <dynamic prepend="where" >     
+      <isNotEmpty prepend="and" property="name" >
+        name like CONCAT('%',#name#,'%')
+      </isNotEmpty>   
+      <isNotEmpty prepend="and" property="phone" >
+        phone like CONCAT('%',#phone#,'%')
+      </isNotEmpty> 
+      <isNotEmpty prepend="and" property="idnum" >
+        idnum like CONCAT('%',#idnum#,'%')
+      </isNotEmpty> 
+      <isNotEmpty prepend="and" property="usrcustid" >
+        usrcustid like CONCAT('%',#usrcustid#,'%')
+      </isNotEmpty> 
+      <isNotEmpty prepend="and" property="state" >
+        state = #state#
+      </isNotEmpty> 
+      <isNotEmpty prepend="and" property="lmtype" >
+        lmtype = #lmtype#
+      </isNotEmpty> 
+    </dynamic>
+    order by addtime desc
+  </select>
+  
+  <select id="getOne" resultClass="Loanman"  > 
+  		select * from loanman where lmid=#lmid#
+  </select>
+  
+  <update id="update" parameterClass="Loanman" >
+    update loanman
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="lmtype" >
+        lmtype = #lmtype:VARCHAR#
+      </isNotNull> 
+      <isNotNull prepend="," property="phone" >
+        phone = #phone:VARCHAR#
+      </isNotNull> 
+      <isNotNull prepend="," property="name" >
+        name = #name:VARCHAR#
+      </isNotNull> 
+      <isNotNull prepend="," property="idnum" >
+        idnum = #idnum:VARCHAR#
+      </isNotNull> 
+      <isNotNull prepend="," property="usrcustid" >
+        usrcustid = #usrcustid:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="usrcustname" >
+        usrcustname = #usrcustname:VARCHAR#
+      </isNotNull> 
+      <isNotNull prepend="," property="state" >
+        state = #state:VARCHAR#
+      </isNotNull>   
+      <isNotNull prepend="," property="address" >
+        address = #address:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="urgentman" >
+        urgentman = #urgentman:VARCHAR#
+      </isNotNull> 
+      <isNotNull prepend="," property="addtime" >
+        addtime = #addtime:TIMESTAMP#
+      </isNotNull>
+    </dynamic>
+    where lmid = #lmid:INTEGER#
+  </update>
+</sqlMap>

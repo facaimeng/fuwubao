@@ -1,0 +1,505 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="sys_loan" >
+
+  <typeAlias type="com.cbai.model.rongyin.ibatis.entity.LoanInfo" alias="LoanInfo"/>
+  
+  <typeAlias type="com.cbai.model.rongyin.sys.loan.vo.LoanSearchVO" alias="LoanSearchVO"/>
+  
+  <select id="SYS-GET-LOANINFO" resultClass="LoanInfo" parameterClass="LoanSearchVO">
+      <![CDATA[select * from loan_info ]]>
+      <dynamic prepend="where">
+          
+          <isNotEmpty property="lnid" prepend="and">
+              <![CDATA[lnid = #lnid:INTEGER#]]>
+          </isNotEmpty>
+          
+          <isNotEmpty property="lntype" prepend="and">
+              <![CDATA[lntype = #lntype:INTEGER#]]>
+          </isNotEmpty>
+          
+          <isNotEmpty property="lnnum" prepend="and">
+              <![CDATA[lnnum like concat('%', #lnnum#, '%')]]>
+          </isNotEmpty>
+          
+          <isNotEmpty property="lname" prepend="and">
+              <![CDATA[name like concat('%', #lname#, '%')]]>
+          </isNotEmpty>
+          
+          <isNotEmpty property="lman" prepend="and">
+              <![CDATA[lman like concat('%', #lman#, '%')]]>
+          </isNotEmpty>
+          
+          <isNotEmpty property="proid" prepend="and">
+              <![CDATA[proid = #proid:VARCHAR#]]>
+          </isNotEmpty>
+          
+          <isNotEmpty property="directtype" prepend="and">
+              <![CDATA[directtype = #directtype:VARCHAR#]]>
+          </isNotEmpty>
+          
+          <isNotEmpty property="dirstate" prepend="and">
+              <![CDATA[dirstate = #dirstate:VARCHAR#]]>
+          </isNotEmpty>
+          
+          <isNotEmpty property="status">
+              <!-- 可操作 -->
+              <isEqual property="status" prepend="and" compareValue="KECAOZUO">
+              <![CDATA[(status = 'NOCHECK' or status = 'UNPASS')]]>
+              </isEqual>
+              
+              <!-- 已审核通过  在投   -->
+              <isEqual property="status" prepend="and" compareValue="CHECKPASS">
+              <![CDATA[status = 'NORMAL']]>
+              </isEqual>
+              
+              <!-- 待放款标   -->
+              <isEqual property="status" prepend="and" compareValue="WAITLOAN">
+              <![CDATA[(status = 'FINISH' and payformoney < collectmoney)]]>
+              </isEqual>
+              
+              <!-- 已流标   -->
+              <isEqual property="status" prepend="and" compareValue="LIUBIAO">
+              <![CDATA[status = 'LOSSED']]>
+              </isEqual>
+          </isNotEmpty>
+          
+          <isNotEmpty property="directtype" prepend="and">
+              <![CDATA[directtype = #directtype:VARCHAR#]]>
+          </isNotEmpty>
+          
+          <isNotEmpty property="minmoney" prepend="and">
+              <![CDATA[loanmoney >= #minmoney:INTEGER#]]>
+          </isNotEmpty>
+          
+          <isNotEmpty property="maxmoney" prepend="and">
+              <![CDATA[loanmoney <= #maxmoney:INTEGER#]]>
+          </isNotEmpty>
+          
+      </dynamic>
+      <![CDATA[order by pubtime desc]]>
+  </select>
+  
+  <!-- 等待放款的标的信息(等待放款条件:标的审核完成 + 可投金额为0 + 已还金额不等于标的金额) 已弃用 -->
+  <select id="SYS-GET-WATTINGLOANS" resultClass="LoanInfo" parameterClass="LoanSearchVO">
+      <![CDATA[select * from loan_info as l 
+        where l.status='NORMAL' and l.avalmoney = 0 and l.payformoney!=l.loanmoney
+      ]]>
+      <dynamic>
+        <isNotEmpty property="lnid" prepend="and">
+            <![CDATA[lnid = #lnid:INTEGER#]]>
+        </isNotEmpty>
+        
+        <isNotEmpty property="lnnum" prepend="and">
+            <![CDATA[lnnum like concat('%', #lnnum#, '%')]]>
+        </isNotEmpty>
+      </dynamic>
+      <![CDATA[order by pubtime desc]]>
+  </select>
+  
+  <select id="SYS-GET-LOANTIME" resultClass="java.lang.String">
+      <![CDATA[select loantime from loan_info as l where lnid = #lnid:INTEGER#]]>
+  </select>
+  
+  <!-- 可定向放款的标的信息(可定向放款标的条件:标的审核完成 + 可投金额为0 + 已还金额等于标的金额) -->
+  <select id="SYS-GET-DIRECTLOANS" resultClass="LoanInfo" parameterClass="LoanSearchVO">
+      <![CDATA[select * from loan_info as l 
+        where l.status='FINISH' and l.collectmoney > 0 and l.payformoney=l.collectmoney and l.ifdirect='Y'
+      ]]>
+      <dynamic>
+        <isNotEmpty property="lnid" prepend="and">
+            <![CDATA[lnid = #lnid:INTEGER#]]>
+        </isNotEmpty>
+        
+        <isNotEmpty property="lnnum" prepend="and">
+            <![CDATA[lnnum like concat('%', #lnnum#, '%')]]>
+        </isNotEmpty>
+      </dynamic>
+      <![CDATA[order by pubtime desc]]>
+  </select>
+  
+  
+  <delete id="SYS-DEL-LOANINFO"  parameterClass="java.lang.Integer">
+    DELETE FROM loan_info WHERE lnid = #lnid# 
+  </delete>
+  
+  <delete id="SYS-DELLIST-LOANINFOS"  parameterClass="java.util.Map">
+    DELETE FROM loan_info WHERE lnid in 
+    <dynamic>
+	 	<iterate close=")" open="(" conjunction="," property="lnids">  
+	        <![CDATA[#lnids[]#]]>
+	    </iterate>
+    </dynamic>
+  </delete>
+  
+  <update id="SYS-UPDATE-AVALMONEY" parameterClass="java.util.Map" >
+    update loan_info set avalmoney = avalmoney + #transAmt#  where lnid = #lnid#
+  </update>
+  
+  <update id="SYS-UPDATE-PAYFORMONEY" parameterClass="java.util.Map" >
+    update loan_info set payformoney = payformoney + #transAmt#  where lnid = #lnid#
+  </update>
+  
+  <update id="SYS-UPDATE-CANCLE" parameterClass="LoanInfo" >
+    update loan_info set avalmoney = #avalmoney#, collectmoney = #collectmoney#  where lnid = #lnid#
+  </update>
+  
+  <update id="SYS-UPDATE-LOANINFO" parameterClass="LoanInfo" >
+    update loan_info
+    <dynamic prepend="set" >
+      <isNotEmpty prepend="," property="proid" >
+        proid = #proid:INTEGER#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="pronum" >
+        pronum = #pronum:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="lntype" >
+        lntype = #lntype:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="cmid" >
+        cmid = #cmid:INTEGER#
+      </isNotEmpty> 
+      
+      <isNotEmpty prepend="," property="cname" >
+        cname = #cname:VARCHAR#
+      </isNotEmpty>
+
+      <isNotEmpty prepend="," property="hfproid" >
+        hfproid = #hfproid:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="ifdirect" >
+        ifdirect = #ifdirect:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="directtype" >
+        directtype = #directtype:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="dusrcustid" >
+        dusrcustid = #dusrcustid:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="dusrcustid" >
+        dusrcustid = #dusrcustid:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="dman" >
+        dman = #dman:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="name" >
+        name = #name:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="bidtype" >
+        bidtype = #bidtype:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="bidtypename" >
+        bidtypename = #bidtypename:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="loanmoney" >
+        loanmoney = #loanmoney:INTEGER#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="collectmoney" >
+        collectmoney = #collectmoney:INTEGER#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="minimoney" >
+        minimoney = #minimoney:INTEGER#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="avalmoney" >
+        avalmoney = #avalmoney:INTEGER#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="repayedmoney" >
+        repayedmoney = #repayedmoney:INTEGER#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="repayedmoney" >
+        yearate = #yearate:INTEGER#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="allinterest" >
+        allinterest = #allinterest:INTEGER#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="loandead" >
+        loandead = #loandead:INTEGER#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="loandeadunit" >
+        loandeadunit = #loandeadunit:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="repaytype" >
+        repaytype = #repaytype:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="repaytypename" >
+        repaytypename = #repaytypename:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="repaytimes" >
+        repaytimes = #repaytimes:INTEGER#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="startdate" >
+        startdate = #startdate:TIMESTAMP#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="enddate" >
+        enddate = #enddate:TIMESTAMP#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="repaydate" >
+        repaydate = #repaydate:TIMESTAMP#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="lastrepaydate" >
+        lastrepaydate = #lastrepaydate:TIMESTAMP#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="loantime" >
+        loantime = #loantime:TIMESTAMP#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="warrtype" >
+        warrtype = #warrtype:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="warrtypename" >
+        warrtypename = #warrtypename:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="protype" >
+        protype = #protype:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="protypename" >
+        protypename = #protypename:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="risktype" >
+        risktype = #risktype:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="risktypename" >
+        risktypename = #risktypename:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="bidpayfor" >
+        bidpayfor = #bidpayfor:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="lmantype" >
+        lmantype = #lmantype:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="lmantypename" >
+        lmantypename = #lmantypename:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="lman" >
+        lman = #lman:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="lmanuid" >
+        lmanuid = #lmanuid:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="lusrcustid" >
+        lusrcustid = #lusrcustid:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="lcertnum" >
+        lcertnum = #lcertnum:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="lmanphone" >
+        lmanphone = #lmanphone:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="usefor" >
+        usefor = #usefor:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="auditstat" >
+        auditstat = #auditstat:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="auditdesc" >
+        auditdesc = #auditdesc:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="status" >
+        status = #status:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="checkmemo" >
+        checkmemo = #checkmemo:VARCHAR#
+      </isNotEmpty>     
+      
+      <isNotEmpty prepend="," property="dirordid" >
+        dirordid = #dirordid:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="dirstate" >
+        dirstate = #dirstate:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="dirtime" >
+        dirtime = #dirtime:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="diroptime" >
+        diroptime = #diroptime:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="charges" >
+        charges = #charges:VARCHAR#
+      </isNotEmpty>
+
+    </dynamic>
+    where lnid = #lnid:INTEGER#
+  </update>
+  
+  <update id="SYS-UPDATE-BYDIRORDID" parameterClass="LoanInfo" >
+    update loan_info
+    <dynamic prepend="set" >
+      <isNotEmpty prepend="," property="dirstate" >
+        dirstate = #dirstate:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="dirtime" >
+        dirtime = #dirtime:VARCHAR#
+      </isNotEmpty>
+      
+      <isNotEmpty prepend="," property="diroptime" >
+        diroptime = #diroptime:VARCHAR#
+      </isNotEmpty>
+    </dynamic>
+    where dirordid = #dirordid:INTEGER#
+  </update>
+  
+  <insert id="SYS-ADD-LOANINFO" parameterClass="LoanInfo">
+    <![CDATA[
+    insert into loan_info (
+		lnid,
+		proid,
+		pronum,
+		lntype,
+		cmid,   
+		cname,
+		hfproid,
+		lnnum,
+		name,
+		ifdirect,
+		directtype,
+		dusrcustid,
+		dman,
+		bidtype,
+		bidtypename,
+		loanmoney,
+		avalmoney,
+		repayedmoney,
+		payformoney,
+		collectmoney,
+		minimoney,
+		yearate,
+		allinterest,
+		loandead,
+		loandeadunit,
+		repaytype,
+		repaytypename,
+		repaytimes,
+		startdate,
+		enddate,
+		repaydate,
+		lastrepaydate,
+		warrtype,
+		warrtypename,
+		protype,
+		protypename,
+		risktype,
+		risktypename,
+		bidpayfor,
+		lmantype,
+		lmantypename,
+		lman,
+		lmanuid,
+		lusrcustid,
+		lcertnum,
+		lmanphone,
+		usefor,
+		auditstat,
+		auditdesc,
+		status,
+		checkmemo,
+		charges,
+		pubtime)
+    values (
+		#lnid:INTEGER#,
+		#proid:INTEGER#,
+		#pronum:VARCHAR#,
+		#lntype:INTEGER#,
+		#cmid:INTEGER#,
+		#cname:VARCHAR#,
+		#hfproid:VARCHAR#,
+		#lnnum:VARCHAR#,
+		#name:VARCHAR#,
+		#ifdirect:VARCHAR#,
+		#directtype:VARCHAR#,
+		#dusrcustid:VARCHAR#,
+		#dman:VARCHAR#,
+		#bidtype:VARCHAR#,
+		#bidtypename:VARCHAR#,
+		#loanmoney:VARCHAR#,
+		#avalmoney:VARCHAR#,
+		#repayedmoney:VARCHAR#,
+		#payformoney:VARCHAR#,
+		#collectmoney:VARCHAR#,
+		#minimoney:VARCHAR#,
+		#yearate:VARCHAR#,
+		#allinterest:INTEGER#,
+		#loandead:INTEGER#,
+		#loandeadunit:VARCHAR#,
+		#repaytype:VARCHAR#,
+		#repaytypename:VARCHAR#,
+		#repaytimes:INTEGER#,
+		#startdate:TIMESTAMP#,
+		#enddate:TIMESTAMP#,
+		#repaydate:TIMESTAMP#,
+		#lastrepaydate:TIMESTAMP#,
+		#warrtype:VARCHAR#,
+		#warrtypename:VARCHAR#,
+		#protype:VARCHAR#,
+		#protypename:VARCHAR#,
+		#risktype:VARCHAR#,
+		#risktypename:VARCHAR#,
+		#bidpayfor:VARCHAR#,
+		#lmantype:VARCHAR#,
+		#lmantypename:VARCHAR#,
+		#lman:VARCHAR#,
+		#lmanuid:VARCHAR#,
+		#lusrcustid:VARCHAR#,
+		#lcertnum:VARCHAR#,
+		#lmanphone:VARCHAR#,
+		#usefor:VARCHAR#,
+		#auditstat:VARCHAR#,
+		#auditdesc:VARCHAR#,
+		#status:VARCHAR#,
+		#checkmemo:VARCHAR#,
+		#charges:VARCHAR#,
+		#pubtime:TIMESTAMP#)
+    ]]>
+  </insert>
+  
+</sqlMap>

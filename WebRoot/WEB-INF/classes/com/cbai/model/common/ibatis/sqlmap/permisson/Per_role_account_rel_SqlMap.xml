@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="per_role_account_rel" >
+
+ <typeAlias type="com.cbai.model.common.ibatis.entity.PerRoleAccountRel" alias="PerRoleAccountRel"/>
+  
+  <insert id="insert" parameterClass="PerRoleAccountRel" >
+    insert into per_role_account_rel (raccid, roleid, accid)
+    values (#raccid:INTEGER#, #roleid:INTEGER#, #accid:INTEGER#)
+  </insert>
+  
+  <select id="getHasRole" resultClass="PerRoleAccountRel" parameterClass="java.util.Map" >
+		select pruel.*
+		from per_role_account_rel as pruel 
+		where pruel.accid = #accid# and pruel.roleid in (select r.roleid from per_role as r where r.fid=#roleFid#)
+  </select> 
+  
+  <delete id="delete" >
+        delete from per_role_account_rel where accid = #accid# 
+  </delete>
+     
+  
+  
+</sqlMap>

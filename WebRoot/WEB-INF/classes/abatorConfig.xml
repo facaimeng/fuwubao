@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE abatorConfiguration PUBLIC "-//Apache Software Foundation//DTD Abator for iBATIS Configuration 1.0//EN" "http://ibatis.apache.org/dtd/abator-config_1_0.dtd" >
+<abatorConfiguration >
+  <abatorContext >
+    
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://47.97.220.98:3306/rongyin" userId="root" password="123456"> 
+      <classPathEntry location="D:\mysql_5.0_jdbc.jar" />
+    </jdbcConnection>
+    
+    <javaModelGenerator targetPackage="com.cbai.model.rongyin.ibatis.entity" targetProject="rongyin" />
+    
+    <sqlMapGenerator targetPackage="com.cbai.model.rongyin.ibatis.sqlmap.sys" targetProject="rongyin" />
+    
+ 
+    <table schema="" tableName="project_repay_detail" enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false" enableUpdateByExample="false" selectByExampleQueryId="false"/>
+
+ 
+  </abatorContext>
+</abatorConfiguration>

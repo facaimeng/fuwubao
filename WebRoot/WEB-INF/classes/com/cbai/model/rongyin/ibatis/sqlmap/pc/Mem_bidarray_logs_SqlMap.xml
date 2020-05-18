@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="pc_mem_bidarray" >
+     
+	<typeAlias type="com.cbai.model.rongyin.ibatis.entity.BidArrayLogs" alias="BidArrayLogs"/>
+	
+	<insert id="insert" parameterClass="BidArrayLogs">
+	    insert into mem_bidarray_logs(baid, memid, lnid, status, orderId, transAmt, bidtime, optime)
+	     values (#baid:INTEGER#, #memid:INTEGER#, #lnid:INTEGER#, 
+	     #status:VARCHAR#,#orderId:VARCHAR#, #transAmt:VARCHAR#, 
+	     #bidtime:VARCHAR#,#optime:VARCHAR#)
+	</insert>
+	 
+	<update id="update" parameterClass="BidArrayLogs">
+	    update mem_bidarray_logs set status = #status#, optime = #optime# where orderId=#orderId#
+	</update>
+	
+</sqlMap>

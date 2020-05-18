@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="adphotos" >
+  <typeAlias type="cn.com.cbai.module.vol.entity.Adphotos" alias="Adphotos"/>
+  
+  <insert id="insert" parameterClass="Adphotos" >
+    insert into adphotos (adpid, adid, ptitle, gototype,psize,state, purl, sindex,viewcount, uptime)
+    values (#adpid:INTEGER#, #adid:INTEGER#, #ptitle:VARCHAR#, #gototype:VARCHAR#, #psize:VARCHAR#, #state:VARCHAR#,#purl:VARCHAR#,
+      #sindex:INTEGER#, #viewcount:INTEGER#,#uptime:TIMESTAMP#)
+     <selectKey resultClass="int" type="post" keyProperty="adpid" >  
+         select @@IDENTITY as value  
+     </selectKey> 
+  </insert>
+  
+   <select id="getAll" resultClass="Adphotos" parameterClass="java.lang.Integer" >
+		select * 
+		from adphotos where adid = #adid#
+		order by sindex desc,uptime desc
+	</select>
+	
+	 <select id="getCount" resultClass="java.lang.Integer" parameterClass="java.util.Map" >
+		select count(*) from adphotos where adid = #adid# and state = #state#
+	</select>
+  
+	<update id="updateOne" parameterClass="Adphotos" >
+		update adphotos
+		<dynamic prepend="set" >
+ 
+			<isNotNull prepend="," property="ptitle" >
+			  ptitle = #ptitle:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="gototype" >
+			  gototype = #gototype:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="purl" >
+			  purl = #purl:VARCHAR#
+			</isNotNull> 
+			<isNotNull prepend="," property="state" >
+			  state = #state:VARCHAR#
+			</isNotNull> 
+		</dynamic>
+		where adpid = #adpid:INTEGER#
+	</update>
+	
+	<update id="lockOption" parameterClass="java.util.Map">
+		update adphotos set state = #state:VARCHAR#
+		where adpid = #adpid:INTEGER#
+    </update>
+	
+    <update id="updateViewCount" parameterClass="java.lang.Integer">
+		update adphotos set viewcount = viewcount+1
+		where adpid = #adpid:INTEGER#
+    </update>
+    
+     <delete id="delete" >
+      delete from adphotos
+      where adpid in(
+      <iterate conjunction="," >
+        #[]#
+      </iterate>)
+     </delete>
+
+</sqlMap>

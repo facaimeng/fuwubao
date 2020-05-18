@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="api_mem_account_logs" >
+  
+  <typeAlias type="com.cbai.model.rongyin.ibatis.entity.MemAccountLogs" alias="MemAccountLogs"/>
+  
+  <select id="select" resultClass="MemAccountLogs" parameterClass="java.util.Map">
+     select * from mem_account_logs
+     <dynamic prepend="where">
+          <isNotEmpty prepend="and" property="recid" >
+	        recid = #recid:INTEGER#
+	      </isNotEmpty>
+	      <isNotEmpty prepend="and" property="usrcustid" >
+	        usrcustid = #usrcustid:VARCHAR#
+	      </isNotEmpty>
+	      <isNotEmpty prepend="and" property="ordid" >
+	        ordid = #ordid:VARCHAR#
+	      </isNotEmpty>
+     </dynamic>
+     order by addtime desc
+  </select>
+  
+  <delete id="delete" parameterClass="java.lang.Integer" >
+    delete from mem_account_logs
+    where recid = #recid:INTEGER#
+  </delete>
+  
+  <insert id="insert" parameterClass="MemAccountLogs" >
+    insert into mem_account_logs (recid, ltype, memid, usrcustid, title, transmoney, ordid, state,
+      addtime, optime)
+    values (#recid:INTEGER#, #ltype:VARCHAR#, #memid:INTEGER#, #usrcustid:VARCHAR#, #title:VARCHAR#,
+      #transmoney:BIGINT#, #ordid:VARCHAR#, #state:VARCHAR#, #addtime:TIMESTAMP#,
+      #optime:TIMESTAMP#)
+  </insert>
+  
+  <update id="update" parameterClass="MemAccountLogs" >
+    update mem_account_logs
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="ltype" >
+        ltype = #ltype:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="memid" >
+        memid = #memid:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="usrcustid" >
+        usrcustid = #usrcustid:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="title" >
+        title = #title:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="transmoney" >
+        transmoney = #transmoney:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="ordid" >
+        ordid = #ordid:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="state" >
+        state = #state:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="addtime" >
+        addtime = #addtime:TIMESTAMP#
+      </isNotNull>
+      <isNotNull prepend="," property="optime" >
+        optime = #optime:TIMESTAMP#
+      </isNotNull>
+    </dynamic>
+    where recid = #recid:INTEGER#
+  </update>
+  
+  <update id="update_netsave_callback" parameterClass="java.util.Map" >
+    <![CDATA[
+    update mem_account_logs set state ='DONE',optime = #optime:TIMESTAMP#
+    where usrcustid = #usrcustid:VARCHAR# and ordid = #ordid:VARCHAR#
+    ]]>
+  </update>
+  
+  
+</sqlMap>

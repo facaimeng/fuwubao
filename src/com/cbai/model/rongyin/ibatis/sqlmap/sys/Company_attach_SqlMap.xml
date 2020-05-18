@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="company_attach" >
+
+  <typeAlias type="com.cbai.model.rongyin.ibatis.entity.CompanyAttach" alias="CompanyAttach"/>
+  
+  <insert id="insert" parameterClass="CompanyAttach" >
+    insert into company_attach (cmattid, cmid, name, fsize, sindex, ext, furl,memo, uptime)
+    values (#cmattid:INTEGER#, #cmid:INTEGER#, #name:VARCHAR#, #fsize:VARCHAR#, #sindex:INTEGER#,
+      #ext:VARCHAR#, #furl:VARCHAR#,#memo:VARCHAR#, #uptime:TIMESTAMP#)
+  </insert> 
+  
+  <select id="getAll" resultClass="CompanyAttach" parameterClass="java.lang.Integer" >
+		select *
+		from company_attach where cmid = #cmid#
+		order by uptime desc
+  </select>
+  
+  <select id="getOne" resultClass="CompanyAttach" parameterClass="java.lang.Integer" >
+		select * from company_attach where cmattid =  #cmattid#
+  </select>
+  
+  <update id="update" parameterClass="CompanyAttach" >
+    update company_attach
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="cmid" >
+        cmid = #cmid:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="name" >
+        name = #name:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="fsize" >
+        fsize = #fsize:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="sindex" >
+        sindex = #sindex:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="ext" >
+        ext = #ext:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="furl" >
+        furl = #furl:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="memo" >
+        memo = #memo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="uptime" >
+        uptime = #uptime:TIMESTAMP#
+      </isNotNull>
+    </dynamic>
+    where cmattid = #cmattid:INTEGER#
+  </update>
+  
+  <delete id="delete" parameterClass="java.lang.Integer" >
+    delete from company_attach
+    where cmattid = #cmattid:INTEGER#
+  </delete>
+</sqlMap>

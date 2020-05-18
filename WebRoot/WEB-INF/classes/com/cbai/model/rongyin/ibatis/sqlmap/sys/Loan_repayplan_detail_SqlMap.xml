@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="loan_repayplan_detail">
+  
+  <typeAlias type="com.cbai.model.rongyin.ibatis.entity.MemRepaymentDetail" alias="MemRepaymentDetail" />
+  <typeAlias type="com.cbai.model.rongyin.ibatis.entity.LoanRepayPlanDetail" alias="LoanRepayPlanDetail" />
+  <typeAlias type="com.cbai.model.rongyin.sys.loan.vo.LoanRepayPlanDetailVO" alias="LoanRepayPlanDetailVO" />
+  
+  <select id="SYS-GET-REPALYDETAIL" resultClass="LoanRepayPlanDetail" parameterClass="java.util.Map">
+      <![CDATA[select * from loan_repay_detail ]]>
+      <dynamic prepend="where">
+          <isNotEmpty property="lnid" prepend="and">
+              <![CDATA[lnid = #lnid:INTEGER#]]>
+          </isNotEmpty>
+          <isNotEmpty property="lnnum" prepend="and">
+              <![CDATA[rpid = #rpid:VARCHAR#]]>
+          </isNotEmpty>
+      </dynamic>
+      <![CDATA[order by pretime asc]]>
+  </select>
+
+  <select id="SYS-GET-WAITREPAY" resultClass="LoanRepayPlanDetailVO" parameterClass="java.util.Map">
+      <![CDATA[
+      select 
+          d.lrpdid as lrpdid,
+          d.rpid as rpid,
+          d.curperiod as curperiod,
+          
+          b.mblid as mblid,
+          b.bidordernum as bidordernum,
+          b.bidorderdate as bidorderdate,
+          b.bidmoney as bidmoney,
+          b.profit as profit,
+          b.oppaytime as bidpaytime,
+          b.usrcustid as holdusrcustid,
+          
+          l.name as name,
+          m.realname as lman,
+          rp.state as state,
+          rp.loantime as loantime
+          
+      from loan_repay_detail as d
+          left join mem_bid_logs as b on d.mblid = b.mblid
+          left join loan_info as l on d.lnid = l.lnid
+          left join members as m on m.usrcustid = b.usrcustid
+          left join loan_repay_plan as rp on rp.rpid = d.rpid
+          
+      where d.rpid = #rpid:INTEGER# and d.realrpmoney = 0 and d.rptime is null
+      order by d.rptime asc
+      ]]>
+  </select>
+  
+  <select id="SYS-GET-HISTORYREPAY" resultClass="LoanRepayPlanDetailVO" parameterClass="java.util.Map">
+      <![CDATA[
+      select 
+          d.lrpdid as lrpdid,
+          d.rpid as rpid,
+          d.curperiod as curperiod,
+          d.realrpmoney as realrpmoney,
+          d.rpordernum as rpordernum,
+          d.rpmoney as rpmoney,
+          
+          b.mblid as mblid,
+          b.bidordernum as bidordernum,
+          b.bidorderdate as bidorderdate,
+          b.bidmoney as bidmoney,
+          b.profit as profit,
+          b.oppaytime as bidpaytime,
+          b.usrcustid as holdusrcustid,
+          
+          l.name as name,
+          m.realname as lman,
+          rp.state as state,
+          rp.loantime as loantime,
+          rp.realtime as realrptime
+          
+      from loan_repay_detail as d
+          left join mem_bid_logs as b on d.mblid = b.mblid
+          left join loan_info as l on d.lnid = l.lnid
+          left join members as m on m.usrcustid = b.usrcustid
+          left join loan_repay_plan as rp on rp.rpid = d.rpid
+          
+      where d.rpid = #rpid:INTEGER# and rp.rpcount = rp.realrpcount
+      order by d.rptime asc
+      ]]>
+  </select>
+
+  <select id="SYS-WAITREPAY-DETAIL" resultClass="LoanRepayPlanDetailVO">
+      <![CDATA[
+      select 
+          d.lrpdid as lrpdid,
+          d.rpid as rpid,
+          d.curperiod as curperiod,
+          d.realrpmoney as realrpmoney,
+          d.holdmemid as holdmemid,
+          d.holdusrcustid as holdusrcustid,
+          
+          b.mblid as mblid,
+          b.bidordernum as bidordernum,
+          b.bidorderdate as bidorderdate,
+          b.bidmoney as bidmoney,
+          b.oppaytime as bidpaytime,
+          b.profit as profit,
+   
+          rp.loantime as loantime,
+          rp.pretime as pretime,
+      
+          l.yearate as yearate,
+          l.lnid as lnid,
+          l.lnnum as lnnum
+      
+      from loan_repay_detail as d
+          left join mem_bid_logs as b on d.mblid = b.mblid
+          left join loan_repay_plan as rp on d.rpid = rp.rpid
+          left join loan_info as l on d.lnid = l.lnid
+          
+      where lrpdid = #lrpdid:INTEGER#
+      ]]>
+  </select>
+  
+  <update id="SYS-UPDATE-REPALYDETAIL" parameterClass="LoanRepayPlanDetail" >
+    update loan_repay_detail
+    <dynamic prepend="set" >
+      <isNotEmpty prepend="," property="lnid" >
+        lnid = #lnid:INTEGER#
+      </isNotEmpty> 
+      <isNotEmpty prepend="," property="rpordernum" >
+        rpordernum = #rpordernum:INTEGER#
+      </isNotEmpty> 
+      <isNotEmpty prepend="," property="realrpmoney" >
+        realrpmoney = #realrpmoney:INTEGER#
+      </isNotEmpty> 
+      <isNotEmpty prepend="," property="realrptime" >
+        realrptime = #realrptime:TIMESTAMP#
+      </isNotEmpty> 
+    </dynamic>
+    where lrpdid = #lrpdid:INTEGER#
+  </update>
+  
+  <update id="SYS-REPAYPLAN-REALMONEY" parameterClass="java.util.Map" >
+    update loan_repay_plan set realrpcount = realrpcount + 1
+    <dynamic>
+      <isNotEmpty prepend="," property="realrpmoney" >
+        realrpmoney = realrpmoney + #realrpmoney:INTEGER#
+      </isNotEmpty>
+    </dynamic>
+    where rpid = #rpid:INTEGER#
+  </update>
+  
+  <update id="SYS-LOAN-REALMONEY" parameterClass="java.util.Map" >
+    update loan_info
+    <dynamic prepend="set" >
+      <isNotEmpty prepend="," property="repayedmoney" >
+        repayedmoney = repayedmoney + #repayedmoney:INTEGER#
+      </isNotEmpty> 
+    </dynamic>
+    where lnid = #lnid:INTEGER#
+  </update>
+  
+  <update id="SYS-MEMACCOUNT-REALMONEY" parameterClass="java.util.Map" >
+    update mem_account
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="allassets" >
+        allassets = #allassets:INTEGER#
+      </isNotNull>
+      
+      <isNotNull prepend="," property="avlmoney" >
+        avlmoney = #avlmoney:INTEGER#
+      </isNotNull>
+    </dynamic>
+    where memid = #memid:INTEGER#
+  </update>
+  
+  <insert id="SYS-ADD-REPALYDETAIL" parameterClass="LoanRepayPlanDetail">
+    <![CDATA[
+    insert into loan_repay_detail (
+		lrpdid,
+        curperiod,
+        rpordernum,
+        lnid,
+        rpid,
+        mblid,
+        bidordernum,
+        holdmemid,
+        holdusrcustid,
+        rpmoney,
+        realrpmoney,
+        rptime,
+        memo)
+    values(
+		#lrpdid:INTEGER#,
+		#curperiod:INTEGER#,
+		#rpordernum:VARCHAR#,
+		#lnid:INTEGER#,
+		#rpid:INTEGER#,
+		#mblid:INTEGER#,
+		#bidordernum:VARCHAR#,
+		#holdmemid:INTEGER#,
+		#holdusrcustid:VARCHAR#,
+		#rpmoney:INTEGER#,
+		#realrpmoney:INTEGER#,
+		#rptime:TIMESTAMP#,
+		#memo:VARCHAR#
+		)
+    ]]>
+  </insert>
+  
+  <insert id="SYS-ADD-MEMREPAYMENT-LOGDETAIL" parameterClass="MemRepaymentDetail">
+    <![CDATA[
+    insert into mem_repayment_detail(
+		cpid,
+		recid,
+		ordid,
+		ordate,
+		outcustid,
+		subordid,
+		subordate,
+		principalamt,
+		interestamt,
+		fee,
+		addtime)
+    values(
+		#cpid:INTEGER#,
+		#recid:INTEGER#,
+		#ordid:VARCHAR#,
+		#ordate:TIMESTAMP#,
+		#outcustid:VARCHAR#,
+		#subordid:VARCHAR#,
+		#subordate:TIMESTAMP#,
+		#principalamt:INTEGER#,
+		#interestamt:INTEGER#,
+		#fee:INTEGER#,
+		#addtime:TIMESTAMP#)
+    ]]>
+  </insert>
+  	
+</sqlMap>

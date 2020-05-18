@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="sys_stat" > 
+  
+  <typeAlias type="com.cbai.model.rongyin.sys.stat.vo.UserSearchVO" alias="UserSearchVO"/> 
+ 
+  <select id="userSale" resultClass="UserSearchVO" parameterClass="UserSearchVO" >
+		select u.*,a.name as depname
+		from per_users as u,per_department as a
+		where a.pdid=u.pdid
+		<dynamic >
+			<isNotEmpty prepend="and" property="realname">
+				u.realname like CONCAT('%', #realname#, '%')
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="phone">
+				u.phone like CONCAT('%', #phone#, '%')
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="idnum">
+				u.idnum like CONCAT('%', #idnum#, '%')
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="sex">
+				u.sex=#sex#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="state">
+				u.state=#state#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="pdid">
+				u.pdid=#pdid#
+			</isNotEmpty>
+		</dynamic>
+		order by u.addtime desc
+	</select> 
+   
+</sqlMap>

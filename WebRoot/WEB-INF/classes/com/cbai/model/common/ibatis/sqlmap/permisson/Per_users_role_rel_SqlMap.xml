@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="per_users_role_rel" >
+
+ <typeAlias type="com.cbai.model.common.ibatis.entity.PerUsersRoletRel" alias="PerUsersRoletRel"/>
+  
+  <insert id="insert" parameterClass="PerUsersRoletRel" >
+    insert into per_users_role_rel (urrid, roleid, userid)
+    values (#urrid:INTEGER#, #roleid:INTEGER#, #userid:INTEGER#)
+  </insert>
+  
+  <select id="getHasRole" resultClass="PerUsersRoletRel" parameterClass="java.util.Map" >
+		select p1.* from per_users_role_rel as p1 where p1.userid = #userid#
+  </select> 
+  
+  <delete id="delete" >
+        delete from per_users_role_rel where userid = #userid# 
+  </delete>
+     
+  
+  
+</sqlMap>

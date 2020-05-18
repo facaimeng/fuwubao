@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+ <sqlMap namespace="api_mem_login" >
+ 
+  <typeAlias type="com.cbai.model.rongyin.api.common.vo.MemberVO" alias="MemberVO"/>
+  
+  <typeAlias type="com.cbai.model.rongyin.ibatis.entity.MemloginLogs" alias="MemloginLogs"/>
+  
+   
+  <insert id="insertMemLgLogs" parameterClass="MemloginLogs" >
+    insert into mem_login_logs (memid, phone,openid,sessionid,lgip,lgaddr,intime,outtype,outtime)
+    values (#memid:INTEGER#,#phone:VARCHAR#,#openid:VARCHAR#, #sessionid:VARCHAR#, #lgip:VARCHAR#,#lgaddr:VARCHAR#,#intime:TIMESTAMP#,#outtype:VARCHAR#, #outtime:TIMESTAMP#)
+  </insert>
+  
+ 
+  <select id="getByPhone" resultClass="MemberVO" parameterClass="java.lang.String" >
+  	select memid,phone,state from members  where phone = #phone#
+  </select>  
+  
+</sqlMap>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="per_menu_role_rel" >
+
+ <typeAlias type="com.cbai.model.common.ibatis.entity.PerMenuRoleRel" alias="PerMenuRoleRel"/>
+  
+  <insert id="insert" parameterClass="PerMenuRoleRel" >
+    insert into per_menu_role_rel (mrid, menuid, roleid)
+    values (#mrid:INTEGER#, #menuid:INTEGER#, #roleid:INTEGER#)
+  </insert>
+  
+  <select id="getHasMenu" resultClass="PerMenuRoleRel" parameterClass="java.util.Map" >
+		select pmrel.*
+		from per_menu_role_rel as pmrel 
+		where pmrel.roleid = #roleid# and pmrel.menuid in (select m.menuid from per_menu as m where m.fid=#menuFid# and m.state=#state#)
+  </select> 
+  
+  
+  <select id="getBetween" resultClass="java.lang.Integer"  >
+		select p1.menuid from per_menu_role_rel as p1 where p1.roleid in (select p2.roleid from per_users_role_rel as p2 where p2.userid =#userid#)
+  </select> 
+  
+  <select id="getRoleMenuIDS" resultClass="java.lang.Integer" >
+		select menuid from per_menu_role_rel where roleid = #roleid#
+  </select> 
+  
+  <delete id="delete" >
+        delete from per_menu_role_rel where roleid = #roleid# 
+  </delete>
+  
+  <delete id="delByIDS" parameterClass="java.util.Map" >
+        delete from per_menu_role_rel
+		where roleid = #roleid# and menuid in(
+      <iterate property="delIDS"  conjunction="," >
+        #delIDS[]#
+      </iterate>)
+  </delete>
+     
+  
+  
+</sqlMap>

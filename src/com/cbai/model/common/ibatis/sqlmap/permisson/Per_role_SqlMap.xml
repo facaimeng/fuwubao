@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="per_role" >  
+	
+  <typeAlias type="com.cbai.model.common.ibatis.entity.PerRole" alias="PerRole"/>
+	
+  <insert id="insert" parameterClass="PerRole">
+    insert into per_role (roleid, fid, name,path,state, memo, addtime)
+    values (#roleid:INTEGER#, #fid:INTEGER#, #name:VARCHAR#, #path:VARCHAR#, #state:VARCHAR#, #memo:VARCHAR#, #addtime:TIMESTAMP#)
+    <selectKey resultClass="int" type="post" keyProperty="roleid" >  
+         select @@IDENTITY as value  
+    </selectKey>
+  </insert>
+  
+   <select id="getAll" resultClass="PerRole" parameterClass="java.util.Map" >
+		select * from per_role
+		where fid= #fid#
+		<dynamic > 
+			<isNotEmpty prepend="and" property="state">
+				state = #state#
+			</isNotEmpty>
+		</dynamic>
+	    order by addtime desc
+	</select>
+ 
+	
+	<select id="getOne" resultClass="PerRole" parameterClass="java.lang.Integer" >
+		select * from per_role where roleid =  #roleid#
+	</select>
+	
+	<select id="getNavOne" resultClass="PerRole" parameterClass="java.lang.Integer" >
+		select roleid,fid,name from per_role where roleid =  #roleid#
+	</select>
+	
+	<select id="getForAccount" resultClass="PerRole" parameterClass="java.util.Map" >
+		select pr1.roleid,pr1.fid,pr1.name,(select count(*) from per_role as pr2 where pr2.fid=pr1.roleid) childCount
+		from per_role as pr1
+		where pr1.fid= #fid#
+		order by pr1.addtime desc
+	</select> 
+ 
+	
+	<update id="updateOne" parameterClass="PerRole" >
+		update per_role
+		<dynamic prepend="set" >
+			<isNotNull prepend="," property="name" >
+			  name = #name:VARCHAR#
+			</isNotNull> 
+			<isNotNull prepend="," property="memo" >
+			  memo = #memo:VARCHAR#
+			</isNotNull>  
+			<isNotNull prepend="," property="state" >
+			  state = #state:VARCHAR#
+			</isNotNull>
+		</dynamic>
+		where roleid = #roleid:INTEGER#
+	</update>
+	 
+	<update id="updatePath" parameterClass="PerRole" >
+		update per_role set path=replace(path,#oldname:VARCHAR#,#name:VARCHAR#)
+	</update>
+  
+</sqlMap>

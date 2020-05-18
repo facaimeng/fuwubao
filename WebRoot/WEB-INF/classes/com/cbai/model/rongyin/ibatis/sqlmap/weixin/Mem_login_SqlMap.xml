@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+ <sqlMap namespace="wx_mem_login" >
+ 
+  <typeAlias type="com.cbai.model.rongyin.weixin.common.vo.MemberVO" alias="MemberVO"/> 
+  
+  <typeAlias type="com.cbai.model.rongyin.ibatis.entity.MemloginLogs" alias="MemloginLogs"/>
+ 
+  <select id="autoLogin" resultClass="MemberVO" parameterClass="java.lang.String" >
+  	select memid,phone,openid from mem_login_logs  where openid = #openid#
+  </select>  
+  
+  <select id="getByPhone" resultClass="MemberVO" parameterClass="java.lang.String" >
+  	select memid,phone,openid,state from members  where phone = #phone#
+  </select>  
+  
+  <update id="upLoginLog" parameterClass="MemloginLogs" >
+    update mem_login_logs
+    <dynamic prepend="set" > 
+      <isNotNull prepend="," property="outtype" >
+        outtype = #outtype:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="outtime" >
+        outtime = #outtime:VARCHAR#
+      </isNotNull> 
+    </dynamic>
+    where sessionid = #sessionid:INTEGER#
+  </update> 
+</sqlMap>

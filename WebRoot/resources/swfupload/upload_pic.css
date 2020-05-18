@@ -1,0 +1,157 @@
+@charset "utf-8";
+/* CSS Document */
+img {
+	border:0px;
+}
+.jiacu {
+	font-weight:bold;
+}
+.size12 {
+	font-size:12px;
+}
+.hangju20 {
+	line-height:20px;
+}
+.huise {
+	color:#afb2b3;
+}
+.div1 {
+	width:467px;
+	height:420px;
+	background:#e5f1f9;
+	border:1px solid #c9c0c0;
+}
+.div2 {
+	background:url(/resources/swfupload/upline.jpg) no-repeat;
+	height:6px;
+	width:467px;
+	clear:both;
+	font-size:0px;
+}
+.div3 {
+	background: url(/resources/swfupload/up.jpg) repeat-x;
+	width:467px;
+	height:28px;
+	clear:both;
+	margin-bottom:6px;
+}
+.div3_1 {
+	width:407px;
+	float:left;
+	height:30px;
+	padding-left:10px;
+	line-height:30px;
+}
+.div3_2 {
+	width:50px;
+	float:left;
+	height:30px;
+	line-height:30px;
+}
+.liulan {
+	width:450px;
+	margin-left:auto;
+	margin-right:auto;
+	margin-top:6px;
+	height:26px;
+	clear:both;
+}
+.kuang {
+	width:450px;
+	height:300px;
+	background:#FFFFFF;
+	border:1px solid #CCCCCC;
+	margin-left:auto;
+	margin-right:auto;
+	clear:both;
+	margin-bottom:6px;
+	margin-top:6px;
+}
+.kuang3 {
+	width:450px;
+	height:270px;
+	background:#FFFFFF;
+	overflow-y:auto;
+	overflow-x:hidden;
+	margin-left:auto;
+	margin-right:auto;
+	clear:both;
+}
+.kuang4 {
+
+	width:450px;
+	height:28px;
+	background:#f7fdfd;
+	margin-left:auto;
+	margin-right:auto;
+	clear:both;
+	border-top:1px solid #CCCCCC;
+	line-height:28px;
+}
+.kuang4_1{ width:158px; height:28px; float:left;}
+.kuang4_2{ width:284px; height:28px; float:left;}
+.kuang1 {
+	width:437px;
+	height: auto;
+	border-bottom:1px solid #e6e5e5;
+	margin-left:auto;
+	margin-right:auto;
+	clear:both;
+	padding-top:15px;
+}
+.kuang1_1 {
+	width:20px;
+	height:19px;
+	line-height:24px;
+	float:left;
+	padding-top:5px;
+}
+.kuang1_2 {
+	width:320px;
+	height:24px;
+	line-height:24px;
+	float:left;
+}
+.kuang1_3 {
+	width:78px;
+	height:24px;
+	line-height:24px;
+	float:left;
+}
+.autolen {
+	white-space:nowrap;
+	text-overflow:ellipsis;
+	overflow:hidden;
+}
+.kuang2 {
+	width:437px;
+	height:25px;
+	margin-left:auto;
+	margin-right:auto;
+	clear:both;
+}
+.hongse {
+	color:#d53939;
+}
+.jd1 {
+	width:316px;
+	height:9px;
+	background:#FFFFFF;
+	border:1px solid #CCCCCC;
+	padding:1px;
+	margin-top:5px;
+	font-size:0px;
+}
+.jd2 {
+	background:#1adf28;
+	height:9px;
+	font-size:0px;
+	width:0%;
+}
+.allbar {
+	widows:58px;
+	height:9px;
+	font-size:0px;
+	background:#1adf28;
+	width:0%;
+}

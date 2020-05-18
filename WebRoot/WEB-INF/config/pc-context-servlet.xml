@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd"
+	default-lazy-init="true">
+	
+	<mvc:resources location="/resources/" mapping="/resources/**"/>
+	
+	<bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter">
+         <property name="supportedMediaTypes">
+             <list>
+                 <value>text/plain;charset=UTF-8</value>
+             </list>
+         </property>
+     </bean>
+    
+    
+	<!--文件上传
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
+	
+	<bean id="multipartResolver" class="com.cbai.common.web.cos.CosMultipartResolver"/>
+	
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="webBindingInitializer">
+			<bean class="com.cbai.common.web.springmvc.BindingInitializer"/>
+		</property>
+	</bean>
+	-->
+	
+	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+	    <!--  
+		<property name="interceptors">
+			<list> 
+				<ref bean="frontLocaleInterceptor"/>
+			</list>
+		</property>
+		-->
+	</bean>
+	
+	<!-- 配置视图解析器：如何把handler方法返回给视图 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	    <property name="prefix" value="/WEB-INF/pages/"></property>
+	    <property name="suffix" value=".jsp"></property>
+	</bean>
+
+	<!-- 
+	<bean id="frontLocaleInterceptor" class="com.cbai.website.common.web.FrontLocaleInterceptor"/>
+	<bean id="frontContextInterceptor" class="com.cbai.website.common.web.FrontContextInterceptor">
+		<property name="auth" value="true"/>
+		<property name="loginUrl" value="/front/mlogin.do"/>
+		<property name="returnUrl" value="/front/cqssc.do"/>
+		<property name="excludeUrls">
+			<list>
+				<value>/mlogin.do</value>
+				<value>/mlogout.do</value>
+				<value>/newstyle.do</value>
+			</list>
+		</property>
+	</bean> 
+	
+	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+		<property name="cookieName" value="clientlanguage"/>
+		<property name="cookieMaxAge" value="-1"/>
+	</bean>
+
+	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="exceptionMappings">
+			<props>
+				<prop key="org.springframework.web.bind.MissingServletRequestParameterException">/WEB-INF/error/requiredParameter.html</prop>
+				<prop key="org.springframework.beans.TypeMismatchException">/WEB-INF/error/mismatchParameter.html</prop>
+				<prop key="org.springframework.web.bind.ServletRequestBindingException">/WEB-INF/error/bindException.html</prop>
+				<prop key="com.jeecms.cms.web.SiteNotFoundException">/WEB-INF/error/siteNotFoundException.html</prop>
+			</props>
+		</property>
+	</bean> 
+	-->
+	
+	<context:annotation-config/>
+	
+    <import resource="pc-action-servlet.xml"/>
+</beans>

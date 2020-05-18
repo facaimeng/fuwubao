@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="mem_login" >
+
+  <typeAlias type="com.cbai.model.rongyin.pc.member.vo.MemberVO" alias="MemberVO"/>
+ 
+  
+  <select id="memLogin" resultClass="MemberVO" parameterClass="java.util.Map">
+    select u.memid,u.memnum,u.phone,u.realname,u.sex,u.state,u.usrcustid,u.iffreeze
+    from members as u
+    where u.phone = #uname# and u.logpwd = #pwd#
+  </select>  
+  
+  <select id="phoneIsExist" resultClass="java.lang.Integer" >
+     select count(*) from members where phone = #phone#
+  </select>
+  
+  <select id="getSimpleMem" resultClass="java.lang.String" >
+     select realname from members where phone = #phone#
+  </select>
+  
+  <select id="idnumIsExist" resultClass="java.lang.Integer" >
+     select count(*) from members where idnum = #idnum#
+  </select>
+  
+  <select id="userIsExist" resultClass="java.lang.Integer" >
+     select count(*) from per_users where phone = #phone#
+  </select>
+  
+  <select id="getSimpleUser" resultClass="java.lang.String" >
+     select realname from per_users where phone = #phone#
+  </select>
+  
+  <select id="getDefUser" resultClass="java.lang.String" >
+     select phone from per_users where userid = #userid#
+  </select>
+   
+</sqlMap>

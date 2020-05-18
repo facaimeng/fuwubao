@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="loan_front" >
+     
+	<typeAlias type="com.cbai.model.rongyin.pc.web.vo.LoanFrontVo" alias="LoanFrontVo"/>
+	<typeAlias type="com.cbai.model.rongyin.pc.web.vo.ProjectImgsVo" alias="ProjectImgsVo"/>
+	<typeAlias type="com.cbai.model.rongyin.pc.web.vo.ProjectAttchVo" alias="ProjectAttchVo"/>
+	
+    <resultMap id="loanDetailMap" class="LoanFrontVo">
+        <result property="lnid" column="l.lnid"/>
+        <result property="proid" column="l.proid"/>
+        <result property="lntype" column="l.lntype"/>
+        <result property="name" column="l.name"/>
+        <result property="enddate" column="l.enddate"/>
+        <result property="startdate" column="l.startdate"/>
+        
+        <result property="coverurl" column="p.coverurl"/>
+        <result property="loanmoney" column="l.loanmoney"/>
+        <result property="minimoney" column="l.minimoney"/>
+        <result property="avalmoney" column="l.avalmoney"/>
+        <result property="collectmoney" column="l.collectmoney"/>
+        
+        <result property="yearate" column="l.yearate"/>
+        <result property="loandead" column="l.loandead"/>
+        <result property="address" column="p.address"/>
+        <result property="allprice" column="p.allprice"/>
+        <result property="avgprice" column="p.avgprice"/>
+        <result property="exprice" column="p.exprice"/>
+        <result property="prtype" column="p.prtype"/>
+        <result property="decorate" column="p.decorate"/>
+        <result property="coordinate" column="p.coordinate"/>
+
+        <result property="projectImages" column="l.proid" select="loan_front.getAllImgs"/>
+        <result property="projectAttchs" column="l.proid" select="loan_front.getAllAttchs"/>
+    </resultMap>
+    
+
+	<select id="getAll" resultClass="LoanFrontVo" parameterClass="java.util.Map">
+	    <![CDATA[
+	    select 
+		    l.lnid as lnid,
+		    l.lntype as lntype,
+		    l.name as name,
+		    p.coverurl as coverurl,
+		    l.loanmoney as loanmoney,
+		    l.avalmoney as avalmoney,
+		    l.yearate as yearate,
+		    l.loandead as loandead, 
+		    
+		    p.address as address,
+		    p.allprice as allprice,
+			p.avgprice as avgprice,
+			p.exprice as exprice,
+			p.area as area,
+			p.htype as htype,
+			p.protype as protype,
+			p.memo as memo
+			
+	    from loan_info as l left join projects as p on p.proid = l.proid
+	    ]]>
+	    
+	    <dynamic prepend="where">
+	        <isNotEmpty prepend="and" property="st">
+		        <isEqual property="st" compareValue="1">
+		            <![CDATA[
+		            l.status = 'NORMAL' and  now()<=l.enddate
+		            ]]>
+		        </isEqual>
+		        <isEqual property="st" compareValue="2">
+		            <![CDATA[
+		            l.status = 'FINISH' and l.loanmoney = l.avalmoney
+		            ]]>
+		        </isEqual>
+		        <isEqual property="st" compareValue="3">
+		            <![CDATA[
+		            l.status = 'REPADE'
+		            ]]>
+		        </isEqual>
+	        </isNotEmpty>
+	        
+	        <isNotEmpty prepend="and" property="lntype">
+	            l.lntype = #lntype#
+	        </isNotEmpty>
+	    </dynamic>
+	    <![CDATA[order by l.lntype desc, l.pubtime desc]]>
+	</select>
+	
+	<select id="loanDetail" resultMap="loanDetailMap" parameterClass="java.util.Map">
+	    <![CDATA[
+	    select 
+		    l.lnid as lnid,
+		    l.proid as proid,
+		    l.lntype as lntype,
+		    l.name as name,
+		    l.startdate as startdate,
+		    l.enddate as enddate,
+		    p.coverurl as coverurl,
+		    l.loanmoney as loanmoney,
+		    l.collectmoney as collectmoney,
+		    l.minimoney as minimoney,
+		    l.avalmoney as avalmoney,
+		    l.yearate as yearate,
+		    l.loandead as loandead,
+		    
+		    p.address as address,
+		    p.allprice as allprice,
+			p.avgprice as avgprice,
+			p.exprice as exprice,
+			p.htype as htype,
+			p.decorate as decorate,
+			p.coordinate as coordinate,
+			p.prtype as prtype
+	    from loan_info as l left join projects as p on p.proid = l.proid
+	    ]]>
+
+	    <dynamic prepend="where">
+	        <isNotEmpty prepend="and" property="lnid">
+				lnid = #lnid#
+			</isNotEmpty>
+	    </dynamic>
+	</select>
+    
+    <select id="getAllImgs" resultClass="ProjectImgsVo">
+	    <![CDATA[
+	    select 
+		    p.proid as proid,
+		    p.furl as furl,
+		    p.name as name
+	    from project_imgs as p
+	    ]]>
+	    <dynamic prepend="where">
+	        p.proid = #proid#
+	    </dynamic>
+	    <![CDATA[order by p.sindex desc]]>
+	</select>
+	
+	
+	
+	
+    <select id="getAllAttchs" resultClass="ProjectAttchVo">
+	    <![CDATA[
+	    select 
+		    p.prattid as prattid,
+		    p.proid as proid,
+		    p.furl as furl,
+		    p.name as name
+	    from project_attach as p
+	    ]]>
+	    <dynamic prepend="where">
+	        p.proid = #proid#
+	    </dynamic>
+	    <![CDATA[order by p.sindex desc]]>
+	</select>
+	
+	<select id="investInfo" resultClass="LoanFrontVo" parameterClass="java.util.Map">
+	 <![CDATA[
+	    select 
+		    l.lnid as lnid,
+		    l.avalmoney as avalmoney,
+		    l.loanmoney as loanmoney,
+		    l.lusrcustid as lusrcustid,
+		    l.collectmoney as collectmoney,
+		    l.yearate as yearate,
+		    l.loandead as loandead,
+		    l.lnnum as lnnum
+	    from loan_info as l
+	    ]]>
+	    <dynamic prepend="where">
+	        <isNotEmpty prepend="and" property="lnid">
+	            l.lnid = #lnid#
+	        </isNotEmpty>
+	    </dynamic>
+	</select>
+	
+	<update id="updateAvlmoney" parameterClass="LoanFrontVo">
+	    update loan_info set avalmoney = #avalmoney# where lnid=#lnid#
+	</update>
+	
+	<update id="updateCollectmoney" parameterClass="LoanFrontVo">
+	    update loan_info set collectmoney = #collectmoney# where lnid=#lnid#
+	</update>
+	
+</sqlMap>

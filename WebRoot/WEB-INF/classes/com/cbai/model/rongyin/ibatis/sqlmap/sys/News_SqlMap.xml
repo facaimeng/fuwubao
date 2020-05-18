@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="news" >
+
+    <typeAlias type="com.cbai.model.rongyin.ibatis.entity.News" alias="News"/>
+    
+    <typeAlias type="com.cbai.model.rongyin.sys.content.vo.NewsSearchVO" alias="NewsSearchVO"/>
+ 
+    <insert id="insert" parameterClass="News" >
+	    insert into news (nid, ntype,title,source,author, sindex, viewcount, pubtime, content,wxcontent,ifindex,ptitle,pdescription,pkeywords)
+	    values (#nid:INTEGER#, #ntype:VARCHAR#,#title:VARCHAR#, #source:VARCHAR#,#author:VARCHAR#,#sindex:INTEGER#, #viewcount:INTEGER#,
+	    #pubtime:TIMESTAMP#, #content:LONGVARCHAR#, #wxcontent:LONGVARCHAR#,#ifindex:VARCHAR#,#ptitle:VARCHAR#,#pdescription:VARCHAR#,#pkeywords:VARCHAR#)
+    </insert>
+   
+    <select id="getAll" resultClass="News" parameterClass="NewsSearchVO" >
+		select * from news
+		where ntype= #ntype#
+		<dynamic >
+			<isNotEmpty prepend="and" property="title">
+				title like CONCAT('%', #title#, '%')
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="source">
+				source like CONCAT('%', #source#, '%')
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="author">
+				author like CONCAT('%', #author#, '%')
+			</isNotEmpty>
+		</dynamic>
+		order by pubtime desc
+	</select>
+ 
+	<select id="getOne" resultClass="News" parameterClass="java.lang.Integer" >
+		select * from news where nid =  #nid#
+	</select>
+	<update id="updateOne" parameterClass="News" >
+		update news
+		<dynamic prepend="set" >
+			<isNotNull prepend="," property="title" >
+			  title = #title:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="source" >
+			  source = #source:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="author" >
+			  author = #author:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="coverurl" >
+			  coverurl = #coverurl:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="ptitle" >
+			  ptitle = #ptitle:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="pdescription" >
+			  pdescription = #pdescription:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="pkeywords" >
+			  pkeywords = #pkeywords:VARCHAR#
+			</isNotNull> 
+			<isNotNull prepend="," property="sindex" >
+			  sindex = #sindex:INTEGER#
+			</isNotNull> 
+ 
+			<isNotNull prepend="," property="content" >
+			  content = #content:LONGVARCHAR#
+			</isNotNull>
+			
+			<isNotNull prepend="," property="wxcontent" >
+			  wxcontent = #wxcontent:LONGVARCHAR#
+			</isNotNull>
+			
+			<isNotNull prepend="," property="pubtime" >
+			  pubtime = #pubtime:TIMESTAMP#
+			</isNotNull>
+		</dynamic>
+		where nid = #nid:INTEGER#
+	</update>
+	
+	
+	
+	 <delete id="delete" >
+      delete from news where nid = #nid#
+     </delete>
+     
+     <select id="delSearch" resultClass="java.util.HashMap" parameterClass="java.util.Map" >
+		select nid,sindex
+		from news where ntype=#ntype#
+		order by sindex DESC
+     </select>
+     
+     <update id="delUpdate" parameterClass="java.util.Map" >
+		update news
+		set sindex = #sindex#
+		where nid = #nid#
+     </update>
+   
+</sqlMap>

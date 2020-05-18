@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="advertise" >
+  <typeAlias type="cn.com.cbai.module.vol.entity.Advertise" alias="Advertise"/>
+ 
+   
+   
+  <insert id="insert" parameterClass="Advertise" >
+    insert into advertise (adid, adtype,gototype, admid, name,admenu,width,height, adurl,pagetag, viewcount,clickcount,state, memo, addtime)
+    values (#adid:INTEGER#, #adtype:VARCHAR#,#gototype:VARCHAR#, #admid:INTEGER#, #name:VARCHAR#,#admenu:VARCHAR#,#width:INTEGER#, #height:INTEGER#,#adurl:VARCHAR#,#pagetag:VARCHAR#,#viewcount:INTEGER#,#clickcount:INTEGER#,
+      #state:VARCHAR#, #memo:VARCHAR#, #addtime:TIMESTAMP#)
+  </insert>
+  
+  <select id="getAll" resultClass="Advertise" parameterClass="java.util.Map">
+		select a1.* from advertise as a1
+		<dynamic >
+			<isNotEmpty prepend="and" property="name">
+				a1.name like CONCAT('%', #name#, '%')
+			</isNotEmpty> 
+			<isNotEmpty prepend="and" property="adid">
+				a1.adid = #adid#
+			</isNotEmpty>
+		</dynamic>
+		 order by admid desc,addtime desc
+  </select>
+  
+   <select id="getOne" resultClass="Advertise" >
+		select * from advertise as a1 where adid =#adid#
+  </select>
+  
+   <select id="getFront" resultClass="Advertise">
+		select adid,adtype,adurl,pagetag,state,width,height
+		from advertise
+		where admid = #admid# order by addtime desc
+  </select>
+   
+  
+   <update id="updateOne" parameterClass="Advertise" >
+		update advertise
+		<dynamic prepend="set" >
+ 
+			<isNotNull prepend="," property="name" >
+			  name = #name:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="pagetag" >
+			  pagetag = #pagetag:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="adurl" >
+			  adurl = #adurl:VARCHAR#
+			</isNotNull> 
+			<isNotNull prepend="," property="gototype" >
+			  gototype = #gototype:VARCHAR#
+			</isNotNull> 
+			<isNotNull prepend="," property="width" >
+			  width = #width:INTEGER#
+			</isNotNull>
+			<isNotNull prepend="," property="height" >
+			  height = #height:INTEGER#
+			</isNotNull>
+			<isNotNull prepend="," property="memo" >
+			  memo = #memo:VARCHAR#
+ 			</isNotNull>
+ 			<isNotNull prepend="," property="state" >
+			  state = #state:VARCHAR#
+ 			</isNotNull>
+ 			<isNotNull prepend="," property="admid" >
+			  admid = #admid:INTEGER#
+			</isNotNull>
+ 			<isNotNull prepend="," property="admenu" >
+			  admenu = #admenu:VARCHAR#
+			</isNotNull>
+ 
+		</dynamic>
+		where adid = #adid:INTEGER#
+  </update> 
+    
+  <update id="updateViewCount" parameterClass="java.lang.Integer">
+		update advertise set viewcount = viewcount+1
+		where adid = #adid:INTEGER#
+  </update>
+  
+  <update id="updateClickCount" parameterClass="java.lang.Integer">
+		update advertise set clickcount = clickcount+1
+		where adid = #adid:INTEGER#
+  </update> 
+  <update id="updateExt" parameterClass="java.util.Map">
+		update advertise set ext = #ext# where adid = #adid:INTEGER#
+  </update>
+   
+</sqlMap>

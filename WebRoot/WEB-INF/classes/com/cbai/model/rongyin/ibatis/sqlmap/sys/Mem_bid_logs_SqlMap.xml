@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="mem_bid_logs" >
+
+  <typeAlias type="com.cbai.model.rongyin.ibatis.entity.MemBidLogs" alias="MemBidLogs"/>
+  <typeAlias type="com.cbai.model.rongyin.sys.loan.vo.MemBidSearchVO" alias="MemBidSearchVO"/>
+
+  <select id="searchAll" parameterClass="MemBidSearchVO" resultClass="MemBidLogs">
+      <![CDATA[select b.*, m.realname, l.name as lnname from mem_bid_logs as b 
+      left join members as m on m.memid = b.memid
+      left join loan_info as l on l.lnid = b.lnid]]>
+      <dynamic prepend="where">
+          <isNotEmpty property="mblid" prepend="and">
+          <![CDATA[b.mblid = #mblid#]]>
+          </isNotEmpty>
+          <isNotEmpty property="lnid" prepend="and">
+          <![CDATA[b.lnid = #lnid#]]>
+          </isNotEmpty>
+          <isNotEmpty property="poid" prepend="and">
+          <![CDATA[b.poid = #poid#]]>
+          </isNotEmpty>
+          <isNotEmpty property="bidordernum" prepend="and">
+          <![CDATA[b.bidordernum like concat('%', #bidordernum#, '%')]]>
+          </isNotEmpty>
+          <isNotEmpty property="loanname" prepend="and">
+          <![CDATA[l.name like concat('%', #loanname#, '%')]]>
+          </isNotEmpty>
+          <isNotEmpty property="realname" prepend="and">
+          <![CDATA[m.realname like concat('%', #realname#, '%')]]>
+          </isNotEmpty>
+          <isNotEmpty property="state" prepend="and">
+          <![CDATA[b.state = #state#]]>
+          </isNotEmpty>
+          <isNotEmpty property="addtimestart" prepend="and">
+          <![CDATA[b.bidtime > #addtimestart#]]>
+          </isNotEmpty>
+          <isNotEmpty property="addtimeend" prepend="and">
+          <![CDATA[b.bidtime < #addtimeend#]]>
+          </isNotEmpty>
+      </dynamic>
+      <![CDATA[order by b.bidtime desc]]>
+  </select>
+  
+  <select id="waittingAll" parameterClass="java.util.Map" resultClass="MemBidLogs">
+      <![CDATA[
+      select b.*, m.realname, l.name as lnname from mem_bid_logs as b 
+      
+      join members as m on m.memid = b.memid
+      join loan_info as l on l.lnid = b.lnid
+      
+      where (b.state='FKFAIL' or b.state = 'BIDDONE')
+      ]]>
+      
+      <dynamic>
+          <isNotEmpty property="lnid" prepend="and">
+          <![CDATA[b.lnid = #lnid#]]>
+          </isNotEmpty>
+          
+          <isNotEmpty property="bidordernum" prepend="and">
+          <![CDATA[b.bidordernum like concat('%', #bidordernum#, '%')]]>
+          </isNotEmpty>
+          
+          <isNotEmpty property="loanname" prepend="and">
+          <![CDATA[m.name like concat('%', #loanname#, '%')]]>
+          </isNotEmpty>
+          
+          <isNotEmpty property="state" prepend="and">
+          <![CDATA[]]>
+          </isNotEmpty>
+          
+          <isNotEmpty property="addtimestart" prepend="and">
+          <![CDATA[b.bidtime > #addtimestart#]]>
+          </isNotEmpty>
+          
+          <isNotEmpty property="addtimeend" prepend="and">
+          <![CDATA[b.bidtime < #addtimeend#]]>
+          </isNotEmpty>
+      </dynamic>
+      
+      <![CDATA[order by b.bidtime desc]]>
+  </select>
+  
+  <select id="getAll" parameterClass="java.util.Map" resultClass="MemBidLogs">
+      select * from mem_bid_logs
+      <dynamic prepend="where">
+          <isNotEmpty property="mblid" prepend="and">
+          mblid = #mblid:INTEGER#
+          </isNotEmpty>
+          <isNotEmpty property="bidordernum" prepend="and">
+          bidordernum = #bidordernum:VARCHAR#
+          </isNotEmpty>
+          <isNotEmpty property="usrcustid" prepend="and">
+          usrcustid = #usrcustid:VARCHAR#
+          </isNotEmpty>
+          <isNotEmpty property="state" prepend="and">
+          state = #state:VARCHAR#
+          </isNotEmpty>
+      </dynamic>
+      order by bidtime desc
+  </select>
+  
+  <insert id="insert" parameterClass="MemBidLogs" >
+    insert into mem_bid_logs (mblid, bidordernum, bidorderdate, dadid, dadordernum, poid, pordernum, lnid, lnnum,
+      lusrcustid, memid, usrcustid, holdmemid, holdusrcustid, bidmoney, profit, repaymoney, transperiod,
+      debtmoney, transmoney, bidtrxid, freezeordernum, freezetrxid, state, bidtime, optime, paytime,
+      oppaytime)
+    values (#mblid:INTEGER#, #bidordernum:VARCHAR#, #bidorderdate:VARCHAR#,#dadid:INTEGER#, #dadordernum:VARCHAR#,
+      #poid:INTEGER#, #pordernum:VARCHAR#, #lnid:INTEGER#, #lnnum:VARCHAR#, #lusrcustid:VARCHAR#,
+      #memid:INTEGER#, #usrcustid:VARCHAR#, #holdmemid:INTEGER#, #holdusrcustid:VARCHAR#,
+      #bidmoney:BIGINT#, #profit:BIGINT#, #repaymoney:BIGINT#, #transperiod:INTEGER#, #debtmoney:BIGINT#,
+      #transmoney:BIGINT#, #bidtrxid:VARCHAR#, #freezeordernum:VARCHAR#, #freezetrxid:VARCHAR#,
+      #state:VARCHAR#, #bidtime:TIMESTAMP#, #optime:TIMESTAMP#, #paytime:TIMESTAMP#,
+      #oppaytime:TIMESTAMP#)
+  </insert>
+  
+  <update id="updateState" parameterClass="MemBidLogs" >
+    update mem_bid_logs
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="bidtrxid" >
+        bidtrxid = #bidtrxid:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="freezetrxid" >
+        freezetrxid = #freezetrxid:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="state" >
+        state = #state:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="optime" >
+        optime = #optime:TIMESTAMP#
+      </isNotNull>
+      <isNotNull prepend="," property="oppaytime" >
+        oppaytime = #oppaytime:TIMESTAMP#
+      </isNotNull>
+    </dynamic>
+    where bidordernum = #bidordernum:VARCHAR#
+  </update>
+  
+  <update id="update" parameterClass="MemBidLogs" >
+    update mem_bid_logs
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="bidordernum" >
+        bidordernum = #bidordernum:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="bidtrxid" >
+        bidtrxid = #bidtrxid:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="freezeordernum" >
+        freezeordernum = #freezeordernum:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="freezetrxid" >
+        freezetrxid = #freezetrxid:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="lnid" >
+        lnid = #lnid:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="lnnum" >
+        lnnum = #lnnum:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="lusrcustid" >
+        lusrcustid = #lusrcustid:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="poid" >
+        poid = #poid:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="pordernum" >
+        pordernum = #pordernum:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="memid" >
+        memid = #memid:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="usrcustid" >
+        usrcustid = #usrcustid:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="bidmoney" >
+        bidmoney = #bidmoney:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="state" >
+        state = #state:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="bidtime" >
+        bidtime = #bidtime:TIMESTAMP#
+      </isNotNull>
+      <isNotNull prepend="," property="optime" >
+        optime = #optime:TIMESTAMP#
+      </isNotNull>
+      <isNotNull prepend="," property="paytime" >
+        paytime = #paytime:TIMESTAMP#
+      </isNotNull>
+      <isNotNull prepend="," property="oppaytime" >
+        oppaytime = #oppaytime:TIMESTAMP#
+      </isNotNull>
+    </dynamic>
+    where mblid = #mblid:INTEGER#
+  </update>
+</sqlMap>

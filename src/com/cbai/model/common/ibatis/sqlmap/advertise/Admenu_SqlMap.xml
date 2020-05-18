@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="admenu" >
+  <typeAlias type="cn.com.cbai.module.vol.entity.Admenu" alias="Admenu"/>
+  
+  <insert id="insert" parameterClass="Admenu" >
+    insert into admenu (admid,fid, name, state, sindex,memo, addtime)
+    values (#admid:INTEGER#,#fid:INTEGER#, #name:VARCHAR#, #state:VARCHAR#,#sindex:INTEGER#, #memo:VARCHAR#,
+       #addtime:TIMESTAMP#)
+  </insert>
+   
+  <select id="getAll" resultClass="Admenu" parameterClass="java.util.Map">
+		select * from admenu  where fid= #fid#
+		<dynamic prepend="and"> 
+			<isNotEmpty property="state">
+				state =  #state:VARCHAR#
+			</isNotEmpty>
+		</dynamic>
+		order by sindex DESC,addtime desc
+  </select>
+ 
+  <select id="getOne" resultClass="Admenu" parameterClass="java.lang.Integer" >
+		select * from admenu where admid =  #admid#
+  </select>
+  
+  <select id="getNavOne" resultClass="Admenu" parameterClass="java.lang.Integer" >
+		select admid,fid,name from admenu where admid =  #admid# 
+  </select>
+  
+  <update id="updateOne" parameterClass="Admenu" >
+		update admenu
+		<dynamic prepend="set" >
+ 
+			<isNotNull prepend="," property="name" >
+			  name = #name:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="memo" >
+			  memo = #memo:VARCHAR#
+ 			</isNotNull> 
+ 			<isNotNull prepend="," property="state" >
+			  state = #state:VARCHAR#
+			</isNotNull>	 
+			<isNotNull prepend="," property="sindex" >
+			  sindex = #sindex:INTEGER#
+			</isNotNull>
+ 
+		</dynamic>
+		where admid = #admid:INTEGER#
+  </update>
+   
+</sqlMap>

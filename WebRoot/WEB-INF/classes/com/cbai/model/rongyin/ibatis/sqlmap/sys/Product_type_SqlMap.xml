@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="product_type" >
+
+  <typeAlias type="com.cbai.model.rongyin.ibatis.entity.ProductType" alias="ProductType"/> 
+  
+  <insert id="insert" parameterClass="ProductType" >
+    insert into product_type (prtid, name,sindex,state,memo)
+    values (#prtid:INTEGER#, #name:VARCHAR#,#sindex:INTEGER#,#state:VARCHAR#,#memo:VARCHAR#)
+  </insert>
+ 
+  <select id="getAll" resultClass="ProductType" parameterClass="java.util.Map" > 
+    select * from product_type
+    <dynamic prepend="where" >
+      <isNotEmpty prepend="," property="name" >
+        name like CONTXT('%',#name#,'%')
+      </isNotEmpty>    
+    </dynamic>
+    order by sindex desc,prtid desc
+  </select>
+  
+  <select id="getOne" resultClass="ProductType"  >
+    select * from product_type where prtid=#prtid:INTEGER#
+  </select> 
+  
+  <select id="getByState" resultClass="ProductType" parameterClass="java.lang.String" >
+    select * from product_type where state=#state# order by sindex desc
+  </select>
+  
+  <update id="update" parameterClass="ProductType" >
+    update product_type
+    <dynamic prepend="set" >
+      <isNotEmpty prepend="," property="name" >
+        name = #name:VARCHAR#
+      </isNotEmpty> 
+      <isNotEmpty prepend="," property="state" >
+        state = #state:VARCHAR#
+      </isNotEmpty>
+      <isNotEmpty prepend="," property="memo" >
+        memo = #memo:VARCHAR#
+      </isNotEmpty> 
+    </dynamic>
+    where prtid = #prtid:INTEGER#
+  </update>
+  
+  
+</sqlMap>

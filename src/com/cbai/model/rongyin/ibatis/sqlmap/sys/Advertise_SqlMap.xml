@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+
+<sqlMap namespace="advertise" >
+ 
+  <typeAlias type="com.cbai.model.rongyin.ibatis.entity.Advertise" alias="Advertise"/>
+ 
+  <insert id="insert" parameterClass="Advertise" >
+    insert into advertise (adid, adtype, adtitle, adurl, state, sindex, addtime)
+    values (#adid:INTEGER#, #adtype:VARCHAR#,#adtitle:VARCHAR#, #adurl:VARCHAR#, #state:VARCHAR#,#sindex:INTEGER#,#addtime:TIMESTAMP#)
+  </insert>
+  
+  <select id="getAll" resultClass="Advertise" parameterClass="java.util.Map" >
+    select * from advertise
+    <dynamic prepend="where">
+      <isNotEmpty prepend="and" property="adtitle">
+      		 adtitle like CONCAT('%', #adtitle#, '%')
+      </isNotEmpty> 
+      <isNotEmpty prepend="and" property="adtype">
+      		 adtype = #adtype#
+      </isNotEmpty> 
+    </dynamic>
+    order by sindex DESC,addtime desc
+  </select>
+  
+  <select id="getOne" resultClass="Advertise" >
+    select * from advertise where adid = #adid# 
+  </select>
+  
+  <select id="getFront" resultClass="Advertise" parameterClass="java.util.Map" >
+    select adid,adtitle,adurl,imgurl from advertise where state = 'NORMAL' and adtype=#adtype#
+    order by sindex DESC,addtime desc
+  </select> 
+  
+  <update id="updateOne" parameterClass="Advertise">
+	update advertise
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="adtitle" >
+        adtitle = #adtitle:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="adurl" >
+        adurl = #adurl:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="imgurl" >
+        imgurl = #imgurl:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="sindex" >
+        sindex = #sindex:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="state" >
+        state = #state:VARCHAR#
+      </isNotNull>  
+    </dynamic>
+    where adid = #adid:INTEGER#
+  </update> 
+  
+	 <delete id="delete" >
+      delete from advertise where adid = #adid:INTEGER#
+     </delete>
+     
+    <select id="delSearch" resultClass="java.util.HashMap" parameterClass="java.util.Map" >
+		select adid,sindex
+		from advertise
+		order by sindex DESC
+     </select>
+     
+     <update id="delUpdate" parameterClass="java.util.Map" >
+		update advertise
+		set sindex = #sindex#
+		where adid = #adid#
+     </update>
+
+</sqlMap>

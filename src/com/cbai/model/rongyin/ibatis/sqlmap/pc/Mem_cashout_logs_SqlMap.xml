@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="pc_mem_cashout_logs" >
+  
+   <typeAlias type="com.cbai.model.rongyin.ibatis.entity.MemCashOutDetail" alias="MemCashOutDetail"/>
+
+   <insert id="insert" parameterClass="MemCashOutDetail" >
+    insert into mem_cashout_detail (cdid, recid, cashChl, feetype, feeobjflag, feeaccid, servfee, servfeeaccid, openaccid)
+    values (#cdid:INTEGER#, #recid:INTEGER#, #cashChl:VARCHAR#, #feetype:VARCHAR#, #feeobjflag:VARCHAR#,
+           #feeaccid:VARCHAR#, #servfee:VARCHAR#, #servfeeaccid:VARCHAR#, #openaccid:VARCHAR#)
+   </insert>
+  
+</sqlMap>

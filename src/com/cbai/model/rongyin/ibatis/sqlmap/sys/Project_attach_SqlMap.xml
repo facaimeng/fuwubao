@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="project_attach" >
+
+  <typeAlias type="com.cbai.model.rongyin.ibatis.entity.ProjectAttach" alias="ProjectAttach"/>
+  
+  <insert id="insert" parameterClass="ProjectAttach" >
+    insert into project_attach (prattid, proid, name, fsize, sindex, ext, furl,memo, uptime)
+    values (#prattid:INTEGER#, #proid:INTEGER#, #name:VARCHAR#, #fsize:VARCHAR#, #sindex:INTEGER#,
+      #ext:VARCHAR#, #furl:VARCHAR#,#memo:VARCHAR#, #uptime:TIMESTAMP#)
+  </insert> 
+  
+  <select id="getAll" resultClass="ProjectAttach" parameterClass="java.lang.Integer" >
+		select *
+		from project_attach where proid = #proid#
+		order by uptime desc
+  </select>
+  
+  
+  
+  <select id="getOne" resultClass="ProjectAttach" parameterClass="java.lang.Integer" >
+		select * from project_attach where prattid =  #prattid#
+  </select>
+  
+  <update id="update" parameterClass="ProjectAttach" >
+    update project_attach
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="proid" >
+        proid = #proid:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="name" >
+        name = #name:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="fsize" >
+        fsize = #fsize:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="sindex" >
+        sindex = #sindex:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="ext" >
+        ext = #ext:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="furl" >
+        furl = #furl:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="memo" >
+        memo = #memo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="uptime" >
+        uptime = #uptime:TIMESTAMP#
+      </isNotNull>
+    </dynamic>
+    where prattid = #prattid:INTEGER#
+  </update>
+  
+  <delete id="delete" parameterClass="java.lang.Integer" >
+    delete from project_attach
+    where prattid = #prattid:INTEGER#
+  </delete>
+</sqlMap>

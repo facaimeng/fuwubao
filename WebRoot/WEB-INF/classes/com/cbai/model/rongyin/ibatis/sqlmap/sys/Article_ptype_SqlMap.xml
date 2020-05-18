@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="article_ptype" >
+
+ <typeAlias type="com.cbai.model.rongyin.ibatis.entity.Articleptype" alias="Articleptype"/>
+ 
+    
+  <resultMap class="Articleptype" id="frontAptype">
+      <result property="aptid" column="aptid" jdbcType="INTEGER"/>
+      <result property="name" column="name" jdbcType="VARCHAR"/>
+      <result property="atypeList" column="{id=aptid}" select="article_ptype.getAtype" />
+  </resultMap>
+  
+  <statement id="getAtype" resultClass="com.cbai.model.rongyin.ibatis.entity.Articletype">
+		select a.atid,a.atname from article_type as a where a.aptid = #id# order by a.sindex desc,a.addtime desc
+  </statement>
+  
+  <insert id="insert" parameterClass="Articleptype" >
+    insert into article_ptype (aptid, name, sindex,aptype, addtime,memo,ptitle,pdescription,pkeywords)
+    values (#aptid:INTEGER#, #name:VARCHAR#, #sindex:INTEGER#,#aptype:VARCHAR#,#addtime:TIMESTAMP#,#memo:VARCHAR#,#ptitle:VARCHAR#,#pdescription:VARCHAR#,#pkeywords:VARCHAR#)
+  </insert>
+  
+  <select id="getAll" resultClass="Articleptype" parameterClass="java.util.Map" >
+		select *
+		from article_ptype
+ 		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="name">
+				name like CONCAT('%', #name#, '%')
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="aptype">
+				aptype = #aptype#
+			</isNotEmpty>
+		</dynamic>
+		order by sindex DESC,addtime desc
+	</select>
+  
+  <select id="getOne" resultClass="Articleptype" parameterClass="java.lang.Integer" >
+		select * from article_ptype where aptid =  #aptid#
+  </select>
+  
+  <select id="getDefault" resultMap="frontAptype" parameterClass="java.util.Map" >
+		select a.aptid,a.name
+		from article_ptype as a
+		where a.aptype = #aptype#
+		order by a.sindex DESC,a.addtime desc
+  </select>
+   
+  
+  <select id="getFrontOne" resultClass="Articleptype" parameterClass="java.lang.Integer" >
+		select a.aptid,a.name from article_ptype as a where a.aptid =  #aptid#
+  </select>
+  
+  <update id="updateOne" parameterClass="Articleptype" >
+		update article_ptype
+		<dynamic prepend="set" > 
+			<isNotNull prepend="," property="name" >
+			  name = #name:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="sindex" >
+			  sindex = #sindex:INTEGER#
+			</isNotNull>  
+			<isNotNull prepend="," property="ptitle" >
+			  ptitle = #ptitle:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="pdescription" >
+			  pdescription = #pdescription:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="pkeywords" >
+			  pkeywords = #pkeywords:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="memo" >
+			  memo = #memo:VARCHAR#
+			</isNotNull> 
+		</dynamic>
+		where aptid = #aptid:INTEGER#
+  </update>
+  
+  <update id="updateViewCount" parameterClass="java.lang.Integer">
+		update article_ptype set viewcount = viewcount+1
+		where aptid = #aptid:INTEGER#
+	</update>
+	
+	
+	  <delete id="delete" >
+      delete      
+      from article_ptype
+      where aptid = #aptid:INTEGER#
+     </delete>
+     
+        <select id="delSearch" resultClass="java.util.HashMap" parameterClass="java.util.Map" >
+		select aptid,sindex
+		from article_ptype where aptype=#aptype# 
+		order by sindex DESC
+     </select>
+     
+     <update id="delUpdate" parameterClass="java.util.Map" >
+		update article_ptype
+		set sindex = #sindex#
+		where aptid = #aptid#
+     </update>
+  
+  
+</sqlMap>

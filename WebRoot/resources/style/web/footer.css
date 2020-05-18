@@ -1,0 +1,12 @@
+@charset "utf-8";
+/* CSS Document */
+.footer{ width:1400px; margin:auto; padding-top:75px; overflow:hidden; position:relative;top:-45px; }
+.footer_l{ padding-left:140px; float:left; padding-top:20px;}
+.footer_r{ float:right; padding-right:135px;}
+.footer_r .footer_r_a{ text-align:right;}
+.footer_r .footer_r_a a{ color:#826e68;}
+.footer_r h2{ font-size:12px; color:#9fa7a8;padding-top:5px; padding-bottom:5px; overflow:hidden; float:right;}
+.footer_r h2 img{ float:left;}
+.footer_r h2 b{float:left; font-weight:normal; line-height:22px; padding-left:6px; padding-right:6px;}
+.footer_r p{ width:460px; color:#9fa7a8; text-align:right;}
+
